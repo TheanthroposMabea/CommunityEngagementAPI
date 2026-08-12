@@ -1,0 +1,3 @@
+# Ignore the appsettings.json file, which may contain sensitive information such as connection strings and API keys.
+appsettings.json
+appsettings.Development.json
