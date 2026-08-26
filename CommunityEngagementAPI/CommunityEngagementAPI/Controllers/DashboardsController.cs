@@ -3,6 +3,7 @@ using CommunityEngagementAPI.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace CommunityEngagementAPI.Controllers
 {
@@ -18,6 +19,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("admin")]
+        [OutputCache(Duration = 900)]
         public async Task<ActionResult<AdminsDashboardsDto>> GetAdminsDash()
         {
             
@@ -63,6 +65,7 @@ namespace CommunityEngagementAPI.Controllers
         }
         //give the volunteeers dashboard
         [HttpGet("volunteer/{Volunteer_Id}")]
+        [OutputCache(Duration = 900)]
         public async Task<IActionResult> GetVolunteerDash(int Volunteer_Id)
         {
             try
@@ -93,17 +96,21 @@ namespace CommunityEngagementAPI.Controllers
 
             try
             {
-                double assistantAttendances = await _db.Attendance_Register.Where(pr => pr.Assistant_Id == User_Id && pr.Project.Status == ProjectStatus.Completed).Select(pr=>pr.Project.Hours).SumAsync();
-            
-         
-
+                var assistantAttendances = await _db.Attendance_Register.Where(pr => pr.Assistant_Id == User_Id && pr.Project.Status == ProjectStatus.Completed).Include(pr=>pr.Project).ToListAsync();
+                var hours = assistantAttendances.Select(pr=>pr.Project.Hours).Sum();
+               // var summaries = await _db.Project_Summary.Where(ps=> ps.Project_Id == assistantAttendances.Select(ar=>ar.Project.Project_Id)).CountAsync();
+                var summaries = await _db.Project_Summary
+                    .Where(ps => assistantAttendances
+                        .Select(ar => ar.Project.Project_id)
+                        .Contains(ps.Project_Id))
+                    .CountAsync();
                 var assistantDash = new AssistantDashboardDto()
                 {
-                    HoursLogged =  assistantAttendances,
+                    HoursLogged =  hours,
                     ProjectsRegistered = await _db.Project_Register.Where(pr => pr.User_Id == User_Id).CountAsync(),
                     ProjectsAttended = await _db.Attendance_Register.Where(pe => pe.Assistant_Id == User_Id && pe.Project.Status == ProjectStatus.Completed).CountAsync(),
                     Certificates = await _db.Certificate.Where(c => c.User_Id == User_Id).CountAsync(),
-                    Reports_Submitted = await _db.Report.Where(r=>r.User_Id == User_Id).CountAsync(),
+                    Reports_Submitted =  summaries,
                 };
                 return Ok(assistantDash);
             }

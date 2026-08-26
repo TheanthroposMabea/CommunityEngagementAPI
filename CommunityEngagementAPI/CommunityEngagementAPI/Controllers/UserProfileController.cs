@@ -3,6 +3,7 @@ using CommunityEngagementAPI.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace CommunityEngagementAPI.Controllers
 {
@@ -41,6 +42,7 @@ namespace CommunityEngagementAPI.Controllers
 
 
         [HttpGet("profile-picture/{User_Id}")]
+        [OutputCache(Duration = 900)]
         public async Task<IActionResult> GetProfilePic (int User_Id)
         {
             var profilePic = await _db.Picture.Where(p => p.User_Id == User_Id).FirstOrDefaultAsync();

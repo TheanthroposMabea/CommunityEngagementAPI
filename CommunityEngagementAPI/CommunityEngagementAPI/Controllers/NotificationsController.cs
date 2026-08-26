@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Bcpg;
 using System.Security.Claims;
-
+using Microsoft.AspNetCore.OutputCaching;
 namespace CommunityEngagementAPI.Controllers
 {
     [ApiController]
@@ -59,6 +59,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("my-notifications/{User_Id}")]
+        [OutputCache(Duration = 900)]
         public async Task<IActionResult> GetMyNotifications(int User_Id)
         {
             int page = 1;int  pageSize = 20;
@@ -96,6 +97,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("admin-notification/{Specialist_Id}")]
+        [OutputCache(Duration = 900)]
         public async Task<IActionResult> MyCreatedNotifications(int Specialist_Id)
         {
             int page = 1; int pageSize = 20;

@@ -1,4 +1,4 @@
-﻿using MailKit.Net.Smtp;
+using MailKit.Net.Smtp;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,7 +19,10 @@ namespace CommunityEngagementAPI.Models
         NGOStatus,
         RoleChanged,
         AccountSuspension,
-        CertificateIssued
+        CertificateIssued,
+        ProjectRisk,
+        ProjectEscalation,
+        ProjectRecommendation
     }
     public class Notification
     {

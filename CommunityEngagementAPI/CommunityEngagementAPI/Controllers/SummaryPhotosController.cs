@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace CommunityEngagementAPI.Controllers
 {
@@ -20,6 +21,7 @@ namespace CommunityEngagementAPI.Controllers
 
 
         [HttpGet("getSummaryPhotos/{Summary_Id}")]
+        [OutputCache(Duration = 900)]
         public async Task<IActionResult> GetSummaryPhotos(int Summary_Id)
         {
             var photos = await _db.Photo.Where(p => p.Summary_Id == Summary_Id).ToListAsync();
@@ -47,6 +49,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("photo/{photo_id}")]
+        [OutputCache(Duration = 900)]
         public async Task<IActionResult> GetPhoto(int photo_id)
         {
             var photo = await _db.Photo.Where(d => d.Photo_Id == photo_id).FirstOrDefaultAsync();

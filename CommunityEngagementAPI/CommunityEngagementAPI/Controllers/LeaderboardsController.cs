@@ -3,6 +3,7 @@ using CommunityEngagementAPI.Models.DTOs;
 using CommunityEngagementAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace CommunityEngagementAPI.Controllers
 {
@@ -56,6 +57,10 @@ namespace CommunityEngagementAPI.Controllers
                     g => g.Key,
                     g => g.Sum(a => a.Hours_Logged ?? 0));
 
+            var assistantHours = await _db.Attendance_Register
+             .Where(pr => userIds.Contains(pr.Assistant_Id)  && pr.Project.Status == ProjectStatus.Completed)
+             .Select(pr=>pr.Project.Hours).SumAsync();
+
             var mostActiveUsers = usersQuery
                 .AsEnumerable()
                 .Select(u =>
@@ -64,9 +69,17 @@ namespace CommunityEngagementAPI.Controllers
                         ? projectCount
                         : 0;
 
-                    var hours = hoursByUser.TryGetValue(u.User_Id, out var totalHours)
+                        var hours = 0.0;
+                    if(Role ==UserRoleType.assistant){
+                         hours = assistantHours;
+                    }else{
+                        hours = hoursByUser.TryGetValue(u.User_Id, out var totalHours)
                         ? totalHours
                         : 0;
+                    }
+                    //  hours = hoursByUser.TryGetValue(u.User_Id, out var totalHours)
+                    //     ? totalHours
+                     //   : 0;
 
                     return new MostActiveUserDto
                     {

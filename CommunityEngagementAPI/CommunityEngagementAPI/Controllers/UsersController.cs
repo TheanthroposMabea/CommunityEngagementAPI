@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Data;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace CommunityEngagementAPI.Controllers
 {
@@ -19,6 +20,7 @@ namespace CommunityEngagementAPI.Controllers
         }
         //get all the users in the system
         [HttpGet("Users")]
+        [OutputCache(Duration = 900)]
         public async Task<ActionResult<UserDto>> GetAllUsers()
         {
             var allCampus = await _db.Campus.ToListAsync();
@@ -65,6 +67,7 @@ namespace CommunityEngagementAPI.Controllers
 
         //get the specific user details 
         [HttpGet("{User_Id}")]
+        [OutputCache(Duration = 900)]
         public async Task<ActionResult<UserDto>> GetUser(int User_Id)
         {
             var user = await _db.User.Where(u => u.User_Id == User_Id).Select(u => new UserDto()
@@ -92,6 +95,7 @@ namespace CommunityEngagementAPI.Controllers
 
         //get the user by their role 
         [HttpGet("role/{Role}")]
+        [OutputCache(Duration = 900)]
         public async Task<ActionResult<UserDto>> GetUsersByRole(string Role)
         {
             if (!Enum.TryParse<UserRoleType>(Role, true, out var userRole))
@@ -122,6 +126,7 @@ namespace CommunityEngagementAPI.Controllers
 
         //get the volunteer by volunter type
         [HttpGet("role/volunteer/{Volunteer_Type}")]
+        [OutputCache(Duration = 900)]
         public async Task<ActionResult<VolunteerDto>> GetVolunteersByType(string Volunteer_Type)
         {
             if (!Enum.TryParse<VolunteerType>(Volunteer_Type, true, out var volunteerType))

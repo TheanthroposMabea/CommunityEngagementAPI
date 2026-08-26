@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using StudentApp.API.Services;
 using System;
 using System.Data;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace CommunityEngagementAPI.Controllers
 {
@@ -27,7 +28,7 @@ namespace CommunityEngagementAPI.Controllers
         }
         // handle the ngo apllications
         [HttpPost("ngo-application")]
-        public async Task<IActionResult> handleNGOApplication(NGOApplicationDto ngoDto)
+        public async Task<IActionResult> handleNGOApplication(NGOApplicationDto ngoDto,[FromServices] IOutputCacheStore cacheStore)
         {
             var campuses = await _db.Campus.ToListAsync();
             var campus = campuses.Where(c => c.Code.ToString() == ngoDto.ClosestCampus).FirstOrDefault();
@@ -77,7 +78,7 @@ namespace CommunityEngagementAPI.Controllers
                 }
                 _db.NGO_Application.Add(NGO_App);
                 await _db.SaveChangesAsync();
-
+                await cacheStore.EvictByTagAsync("status-tag", default);
 
                 Document doc;
                 foreach (var file in ngoDto.Files)
@@ -101,6 +102,7 @@ namespace CommunityEngagementAPI.Controllers
                     };
                     _db.Document.Add(doc);
                     await _db.SaveChangesAsync();
+                    // await cacheStore.EvictByTagAsync("status-tag", default);
                 }
 
 
@@ -114,9 +116,10 @@ namespace CommunityEngagementAPI.Controllers
         }
         //get all the NGO applications
         [HttpGet("applications")]
+       [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetAllApplications()
         {
-            var applications = await _db.NGO_Application.ToListAsync();
+            var applications = await _db.NGO_Application.OrderByDescending(a=>a.Date_Submitted).ToListAsync();
             if(applications != null)
             {
                 return Ok(applications);
@@ -129,6 +132,7 @@ namespace CommunityEngagementAPI.Controllers
 
         //get application by its ngos registaion number for director
         [HttpGet("getcampusapplications/specialist/{Id}/application/{Reg_Number}/")]
+        [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetSpecificApplication(string Reg_Number, int Id )
         {
             var application = await _db.NGO_Application.Where(u => u.Reg_Number == Reg_Number && u.Specialist_Id == Id).FirstOrDefaultAsync();
@@ -145,6 +149,7 @@ namespace CommunityEngagementAPI.Controllers
 
         //get the applications by status
         [HttpGet("status/{Status}")]
+        [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetApplicationByStatus(string Status)
         {
             if (!Enum.TryParse<Status>(Status, true, out var appStatus))
@@ -152,7 +157,7 @@ namespace CommunityEngagementAPI.Controllers
                 return BadRequest("Invalid role.");
             }
 
-            var ApplicationsInStatus = await _db.NGO_Application.Where(u => u.Status.Equals(appStatus)).ToListAsync();
+            var ApplicationsInStatus = await _db.NGO_Application.Where(u => u.Status.Equals(appStatus)).OrderByDescending(a=>a.Date_Submitted).ToListAsync();
             if (ApplicationsInStatus != null)
             {
                 return Ok(ApplicationsInStatus);
@@ -166,7 +171,8 @@ namespace CommunityEngagementAPI.Controllers
 
         //update the ngo status - approve or reject - this is for the director only
         [HttpPost("update-status")]
-        public async Task<IActionResult> UpdateApplicationStatus([FromBody]UpdateStatusDto ngoDto)
+        
+        public async Task<IActionResult> UpdateApplicationStatus([FromBody]UpdateStatusDto ngoDto, [FromServices] IOutputCacheStore cacheStore)
         {
             var application = await _db.NGO_Application.Where(u => u.Reg_Number == ngoDto.Reg_Number).FirstOrDefaultAsync(); 
             if(application == null)
@@ -178,6 +184,9 @@ namespace CommunityEngagementAPI.Controllers
             Enum.TryParse<Status>(ngoDto.Status, true, out var ngoStatus);
             application.Status = ngoStatus;
             await _db.SaveChangesAsync();
+            //
+             await cacheStore.EvictByTagAsync("status-tag", default);
+             //
             if (application.Status == Status.Approved)
             {
                 var partnership = new NGO_Partnership
@@ -198,7 +207,7 @@ namespace CommunityEngagementAPI.Controllers
 
         //the specialist review the ngo application
         [HttpPost("specialist-review")]
-        public async Task<IActionResult> applicationReview([FromBody]UpdateStatusDto reviewStatusDto)
+        public async Task<IActionResult> applicationReview([FromBody]UpdateStatusDto reviewStatusDto,[FromServices] IOutputCacheStore cacheStore)
         {
             var application = await _db.NGO_Application.Where(a => a.Reg_Number == reviewStatusDto.Reg_Number).FirstOrDefaultAsync();
             //get speacialis
@@ -225,6 +234,7 @@ namespace CommunityEngagementAPI.Controllers
                 application.Status = ngoStatus;
                 application.Is_Viewed = true;
                 await _db.SaveChangesAsync();
+                await cacheStore.EvictByTagAsync("status-tag", default);
                  if (application.Status == Status.MissingInformation)
                 {
                     var token = new Random().Next(100000, 999999).ToString();
@@ -250,6 +260,7 @@ namespace CommunityEngagementAPI.Controllers
 
         //check status
         [HttpGet("checkstatus")]
+        [OutputCache(Duration = 900)]
         public async Task<IActionResult> CheckStatus(string Reg_Number)
         {
             var application = await _db.NGO_Application.Where(u => u.Reg_Number.Trim() == Reg_Number.Trim()).FirstOrDefaultAsync();
@@ -296,9 +307,10 @@ namespace CommunityEngagementAPI.Controllers
 
         //get all the NGO applications
         [HttpGet("partnerships")]
+        [OutputCache(Duration = 900)]
         public async Task<IActionResult> GetAllPartnerships()
         {
-            var partnerships = await _db.NGO_Partnership.ToListAsync();
+            var partnerships = await _db.NGO_Partnership.OrderByDescending(a=>a.Start_Date).ToListAsync();
             if (!partnerships.IsNullOrEmpty())
             {
                 return Ok(partnerships);
@@ -311,6 +323,7 @@ namespace CommunityEngagementAPI.Controllers
 
         //get application by its ngos registaion number for director
         [HttpGet("campuspartnerships/specialist/{Id}/partnership/{PartnershipId}/")]
+        [OutputCache(Duration = 900)]
         public async Task<IActionResult> GetSpecificPartnership(int PartnershipId, int Id)
         {
             var partnership = await _db.NGO_Partnership.Where(p => p.Partnership_Id == PartnershipId).FirstOrDefaultAsync();
@@ -342,6 +355,7 @@ namespace CommunityEngagementAPI.Controllers
 
         //get the applications by status
         [HttpGet("partnership/status/{Is_Active}")]
+        [OutputCache(Duration = 900)]
         public async Task<IActionResult> GetPartnershipByActivenesss(bool Is_Active)
         {
             //if (!Enum.TryParse<Status>(Status, true, out var appStatus))
@@ -349,7 +363,7 @@ namespace CommunityEngagementAPI.Controllers
             //    return BadRequest("Invalid role.");
             //}
 
-            var partnershipsActiveness = await _db.NGO_Partnership.Where(p => p.Is_Active.Equals(Is_Active)).ToListAsync();
+            var partnershipsActiveness = await _db.NGO_Partnership.Where(p => p.Is_Active.Equals(Is_Active)).OrderByDescending(a=>a.Start_Date).ToListAsync();
             if (partnershipsActiveness != null)
             {
                 return Ok(partnershipsActiveness);

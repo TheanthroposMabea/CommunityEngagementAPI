@@ -69,7 +69,7 @@ namespace CommunityEngagementAPI.Models
         public ICollection<Project_Register> ProjectRegisters { get; set; } = new List<Project_Register>();
         public ICollection<Attendance_Register> AttendanceRegisters { get; set; } = new List<Attendance_Register>();
 
-        [NotMapped]
+    
         public int Slots => Num_Volunteers - ProjectRegisters.Count;
 
         [NotMapped]

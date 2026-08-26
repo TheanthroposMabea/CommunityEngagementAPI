@@ -2,6 +2,7 @@
 using CommunityEngagementAPI.Models.DTOs;
 using CommunityEngagementAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace CommunityEngagementAPI.Controllers
 {
@@ -18,6 +19,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet]
+        [OutputCache(Duration = 900)]
         public async Task<ActionResult<SdgReportDto>> GetSdgReport(
             [FromQuery] int? campusId)
         {

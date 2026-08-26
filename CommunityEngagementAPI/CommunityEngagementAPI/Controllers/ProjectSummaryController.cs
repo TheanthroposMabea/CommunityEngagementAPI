@@ -3,6 +3,7 @@ using CommunityEngagementAPI.Models.DTOs;
 using CommunityEngagementAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace CommunityEngagementAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace CommunityEngagementAPI.Controllers
 
 
         [HttpPost("generatesummary")]
-        public async Task<IActionResult> GenerateSummary([FromForm] GenerateSummaryDto dto)
+        public async Task<IActionResult> GenerateSummary([FromForm] GenerateSummaryDto dto,[FromServices] IOutputCacheStore cacheStore)
         {
             //try
             //{
@@ -94,6 +95,8 @@ namespace CommunityEngagementAPI.Controllers
                 _db.Project_Summary.Add(summary);
                 await _db.SaveChangesAsync();
 
+
+
                 foreach (var file in dto.Photos)
                 {
                     using var memory = new MemoryStream();
@@ -112,7 +115,9 @@ namespace CommunityEngagementAPI.Controllers
                     _db.Photo.Add(photo);
                 }
                 await _db.SaveChangesAsync();
-              
+
+                await cacheStore.EvictByTagAsync("status-tag", default);
+
               var type = Enum.TryParse<NotificationType>("SummaryGenerated", true, out var parsed)
              ? parsed
              : NotificationType.SummaryGenerated;
@@ -143,6 +148,7 @@ namespace CommunityEngagementAPI.Controllers
         //}
 
         [HttpGet("summary/{Project_Id}")]
+       [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetSummary(int Project_Id)
         {
             var summary = await _db.Project_Summary.Include(s => s.Project).Include(s => s.Photos).FirstOrDefaultAsync(s => s.Project_Id == Project_Id);
@@ -231,9 +237,28 @@ namespace CommunityEngagementAPI.Controllers
 
             return Ok(dto);
         }
+ [HttpGet("get-all-summaries")]
+       [OutputCache(PolicyName = "StatusPolicy")]
+        public async Task<IActionResult> GetAllSummaries()
+        {
+                            var summary = await _db.Project_Summary
+                    .Include(s => s.Project)
+                    .OrderByDescending(s => s.Summary_Id)
+                    .Take(1)
+                    .ToListAsync();
 
+                if (summary == null)
+                {
+                    return NotFound(new
+                    {
+                        message = "Project summary not found"
+                    });
+                }
+
+                return Ok(summary);
+        }
         [HttpPost("edit-summary")]
-        public async Task<IActionResult> EditSummary([FromForm] EditSummaryDto dto)
+        public async Task<IActionResult> EditSummary([FromForm] EditSummaryDto dto,[FromServices] IOutputCacheStore cacheStore)
         {
             var summary = await _db.Project_Summary.Include(s => s.Photos).FirstOrDefaultAsync(s => s.Summary_Id == dto.Summary_Id);
 
@@ -279,7 +304,7 @@ namespace CommunityEngagementAPI.Controllers
                 }
             }
             await _db.SaveChangesAsync();
-
+            await cacheStore.EvictByTagAsync("status-tag", default);
             return Ok(new{message = "Project summary updated successfully" });
         }
     }

@@ -136,6 +136,54 @@ namespace StudentApp.API.Services
 
             sendEmailSettings(email, subject, body);  
         }
+
+        //for unregistered users
+          public async Task sendRegistrationLink(string email)
+        {
+            
+          //  token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            string subject = "UJ Community Engagement Registration";
+            TextPart body = new TextPart("html")
+            {
+                Text = $@"
+                    <div style='font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 24px; border: 1px solid #eee; border-radius: 8px;'>
+                        <div style='border-bottom: 3px solid #FF6B00; padding-bottom: 12px; margin-bottom: 20px;'>
+                            <h2 style='color: #222; margin: 0;'>UJ Community Engagement</h2>
+                        </div>
+
+                        <p style='color: #444; font-size: 15px; line-height: 1.5;'>
+                            Hi, you have recently volunteer together with us, WHy not join the family?Kindly receive the link to go to our registration page.
+                        </p>
+
+                        <div style='text-align: center; margin: 24px 0;'>
+                            <a href='http://localhost:3000/register'
+                               style='background-color: #FF6B00; color: white; text-decoration: none; padding: 12px 28px; border-radius: 6px; font-size: 14px; font-weight: bold; display: inline-block;'>
+                                Register Link
+                            </a>
+                        </div>
+
+                        <p style='color: #666; font-size: 13px; line-height: 1.5;'>
+                            Thank You. Hoping to make more impact with you.
+                        </p>
+
+                        <hr style='border: none; border-top: 1px solid #eee; margin: 24px 0;'/>
+
+                        <p style='color: #999; font-size: 11px; text-align: center;'>
+                            University of Johannesburg — Community Engagement<br/>
+                            You're receiving this because you're registered on UJ CE.
+                        </p>
+                    </div>"
+                // Text = $"http://localhost:5173/forgot-password?token={token}&email={Uri.EscapeDataString(email)}"
+            };
+
+            sendEmailSettings(email, subject, body);  
+        }
+
+
+
+
+
+
         public async Task sendReuploadLink(string email, string token, int application_id)
         {
 

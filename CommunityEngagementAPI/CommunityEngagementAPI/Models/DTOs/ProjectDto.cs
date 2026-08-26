@@ -19,6 +19,7 @@
         public string Target_Group { get; set; }
         public DateOnly Date { get; set; }
         public DateTime Date_Created { get; set; }
+        public bool Is_Published {get;set;}
         public TimeOnly Time { get; set; }
         public int Slots { get; set; }
         public int User_Id { get; set; }

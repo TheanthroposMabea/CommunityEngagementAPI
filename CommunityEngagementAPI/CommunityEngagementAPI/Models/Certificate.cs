@@ -8,7 +8,7 @@ namespace CommunityEngagementAPI.Models
         [Key]
         public int Certificate_Id { get; set; }
         public int Total_Hours { get; set; }
-        public int Total_Project { get; set; }
+        public int Total_Projects { get; set; }
         public DateTime Date_Issued { get; set; }
         public int User_Id { get; set; }
 

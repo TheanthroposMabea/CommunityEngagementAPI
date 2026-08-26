@@ -87,6 +87,7 @@ namespace CommunityEngagementAPI.Services
                 .Where(s => userIds.Contains(s.Staff_Id))
                 .ToListAsync();
 
+           
             // -----------------------------------------
             // ATTENDANCE
             // -----------------------------------------

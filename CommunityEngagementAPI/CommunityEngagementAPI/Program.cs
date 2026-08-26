@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using StudentApp.API.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using HostingBackgroundService = Microsoft.Extensions.Hosting.BackgroundService;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,12 +15,19 @@ builder.Services.AddControllers();
 //connect to the database
 builder.Services.AddDbContext<CEAppContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("CEDbConnection")).UseSnakeCaseNamingConvention());
-
+builder.Services.AddOutputCache(options =>{
+    options.AddBasePolicy(builder => builder.Expire(TimeSpan.FromMinutes(15)));
+    options.AddPolicy("StatusPolicy", builder => builder.Expire(TimeSpan.FromMinutes(15)).Tag("status-tag"));
+    
+    });
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<IVolunteerReportService, VolunteerReportService>();
 builder.Services.AddScoped<ISdgReportService, SdgReportService>();
 builder.Services.AddScoped<INgoReportService, NgoReportService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IIntelligenceService, IntelligenceService>();
+builder.Services.AddScoped<IManagementReportService, ManagementReportService>();
+//builder.Services.AddHostedService<BackgroundService>();
 
 builder.Services.AddCors(options =>
 {
@@ -39,16 +47,6 @@ var app = builder.Build();
 
 
 
-//-------------------------------------
-//var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-//builder.WebHost.ConfigureKestrel(options =>
-//{
-//    options.ListenAnyIP(int.Parse(port));
-//});
-
-//-----------------------------------------
-// Configure the HTTP request pipeline.
-//{
 app.UseSwagger();
     app.UseSwaggerUI();
 //}
@@ -68,7 +66,7 @@ using (var scope = app.Services.CreateScope())
 }
 app.UseCors("AllowReact");
 //app.UseHttpsRedirection();
-
+app.UseOutputCache();
 app.UseAuthorization();
 
 app.MapControllers();

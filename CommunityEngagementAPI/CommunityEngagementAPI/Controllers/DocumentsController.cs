@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.IdentityModel.Tokens;
 using System.Runtime.InteropServices;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace CommunityEngagementAPI.Controllers
 {
@@ -19,6 +20,7 @@ namespace CommunityEngagementAPI.Controllers
             _db = db;
         }
         [HttpGet("getApplicationDocs/{Application_Id}")]
+        [OutputCache(Duration = 900)]
         public async Task<IActionResult> getAppicationDocs(int Application_Id)
         {
             var documents = await _db.Document.Where(p => p.Entity_Id == Application_Id ).ToListAsync();
@@ -46,6 +48,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("document/{id}")]
+        [OutputCache(Duration = 900)]
         public async Task<IActionResult> GetDocument(int id)
         {
             var doc = await _db.Document.Where(d => d.Document_Id == id).FirstOrDefaultAsync();
@@ -57,5 +60,29 @@ namespace CommunityEngagementAPI.Controllers
 
             return File(doc.Data, doc.Type, doc.Name);
         }
+		
+		
+		[HttpGet("get-last-4-docs")]
+		public async Task<IActionResult> GetLast4Docs()
+		{
+			var documents = await _db.Document
+				.OrderByDescending(doc => doc.Document_Id)
+				.Take(4)
+				.Select(doc => new SendDocumentDto
+				{
+					Document_Id = doc.Document_Id,
+					Name = doc.Name,
+					Type = doc.Type,
+					Data = Convert.ToBase64String(doc.Data)
+				})
+				.ToListAsync();
+
+			if (documents.IsNullOrEmpty())
+			{
+				return NotFound(new { message = "The application documents are not found" });
+			}
+
+			return Ok(documents);
+		}
     }
 }
