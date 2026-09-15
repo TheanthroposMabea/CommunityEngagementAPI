@@ -85,7 +85,7 @@ namespace CommunityEngagementAPI.Controllers
                 return StatusCode(500, new
                 {
                     message = "Failed to return the Volunteer Dashboard",
-                    error = ex.Message
+                    error = ex.ToString()
                 });
             }
         }
