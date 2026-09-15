@@ -260,7 +260,7 @@ namespace CommunityEngagementAPI.Controllers
 
             if (user != null && user.Role == UserRoleType.specialist)
             {
-                var campusProjects = await _db.Project.Where(p => p.Campus_Id == user.Campus_Id).Select(p => new ProjectDto
+                var campusProjects = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.Campus_Id == user.Campus_Id).Select(p => new ProjectDto
                 {
                     Project_Id = p.Project_id,
                     Title = p.Title,
@@ -290,7 +290,7 @@ namespace CommunityEngagementAPI.Controllers
             else if (user != null && user.Role == UserRoleType.staff)
 
             {
-                var projects = await _db.Project.Where(p => p.User_Id == user.User_Id).Select(p => new ProjectDto
+                var projects = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.User_Id == user.User_Id).Select(p => new ProjectDto
                 {
                     Project_Id = p.Project_id,
                     Title = p.Title,
@@ -316,7 +316,7 @@ namespace CommunityEngagementAPI.Controllers
             }
             else if (user != null && user.Role == UserRoleType.volunteer || user.Role == UserRoleType.assistant)
             {
-                var campusProjects = await _db.Project.Where(p => p.Campus_Id == user.Campus_Id && p.Is_Published == true).Select(p => new ProjectDto
+                var campusProjects = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.Campus_Id == user.Campus_Id && p.Is_Published == true).Select(p => new ProjectDto
                 {
                     Project_Id = p.Project_id,
                     Title = p.Title,
@@ -355,7 +355,7 @@ namespace CommunityEngagementAPI.Controllers
        [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetAllProjects()
         {
-            var projects = await _db.Project.OrderByDescending(p=>p.Date_Created).ToListAsync();
+            var projects = await _db.Project.OrderByDescending(p=>p.Date_Created).Include(p => p.ProjectRegisters).ToListAsync();
             if (projects == null)
             {
                 return NotFound(new { message = "Something went wrong while trying to retrieve projects, might be empty" });
@@ -368,7 +368,7 @@ namespace CommunityEngagementAPI.Controllers
         [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetSpecificProject(int Project_Id)
         {
-            var project = await _db.Project.Where(p => p.Project_id == Project_Id).FirstOrDefaultAsync();
+            var project = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.Project_id == Project_Id).FirstOrDefaultAsync();
             if (project != null)
             {
                 return Ok(project);
@@ -410,7 +410,7 @@ namespace CommunityEngagementAPI.Controllers
                 return BadRequest("Invalid role.");
             }
 
-            var ProjectsInStatus = await _db.Project.Where(u => u.Status.Equals(appStatus)).OrderByDescending(p=>p.Date_Created).ToListAsync();
+            var ProjectsInStatus = await _db.Project.Include(p => p.ProjectRegisters).Where(u => u.Status.Equals(appStatus)).OrderByDescending(p=>p.Date_Created).ToListAsync();
             if (!ProjectsInStatus.IsNullOrEmpty())
             {
                 return Ok(ProjectsInStatus);

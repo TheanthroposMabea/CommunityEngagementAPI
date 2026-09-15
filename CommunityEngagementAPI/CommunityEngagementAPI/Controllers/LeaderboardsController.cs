@@ -57,9 +57,11 @@ namespace CommunityEngagementAPI.Controllers
                     g => g.Key,
                     g => g.Sum(a => a.Hours_Logged ?? 0));
 
-            var assistantHours = await _db.Attendance_Register
-             .Where(pr => userIds.Contains(pr.Assistant_Id)  && pr.Project.Status == ProjectStatus.Completed)
-             .Select(pr=>pr.Project.Hours).SumAsync();
+            var assistantAttendances = await _db.Attendance_Register.Where(pr => userIds.Contains(pr.Assistant_Id)  && pr.Project.Status == ProjectStatus.Completed).Include(pr => pr.Project).ToListAsync();
+            var Assistanthours = assistantAttendances.GroupBy(a => a.Assistant_Id)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Sum(a => a.Project.Hours));
 
             var mostActiveUsers = usersQuery
                 .AsEnumerable()
@@ -70,8 +72,9 @@ namespace CommunityEngagementAPI.Controllers
                         : 0;
 
                         var hours = 0.0;
+                    var hour = 0;
                     if(Role ==UserRoleType.assistant){
-                         hours = assistantHours;
+                        hours = Assistanthours.TryGetValue(u.User_Id,out var totalhours) ? totalhours : 0;
                     }else{
                         hours = hoursByUser.TryGetValue(u.User_Id, out var totalHours)
                         ? totalHours

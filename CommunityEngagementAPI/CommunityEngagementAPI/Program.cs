@@ -3,6 +3,7 @@ using CommunityEngagementAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using StudentApp.API.Services;
+using System.Text.Json.Serialization;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using HostingBackgroundService = Microsoft.Extensions.Hosting.BackgroundService;
 
@@ -12,6 +13,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler =
+            ReferenceHandler.IgnoreCycles;
+    });
+
 //connect to the database
 builder.Services.AddDbContext<CEAppContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("CEDbConnection")).UseSnakeCaseNamingConvention());
