@@ -3,12 +3,13 @@ using CommunityEngagementAPI.Models;
 using CommunityEngagementAPI.Models.DTOs;
 using CommunityEngagementAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StudentApp.API.Services;
 using System;
 using System.Data;
-using Microsoft.AspNetCore.OutputCaching;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CommunityEngagementAPI.Controllers
 {
@@ -310,16 +311,30 @@ namespace CommunityEngagementAPI.Controllers
         [OutputCache(Duration = 900)]
         public async Task<IActionResult> GetAllPartnerships()
         {
-            var partnerships = await _db.NGO_Partnership.OrderByDescending(a=>a.Start_Date).ToListAsync();
-            if (!partnerships.IsNullOrEmpty())
-            {
-                return Ok(partnerships);
+            var partnerships = await _db.NGO_Partnership.Include(a=>a.NGO_Application).OrderByDescending(a=>a.Start_Date)
+            .Select(p => new PartnershipDto
+            { 
+                ClosesCampus = p.NGO_Application.Close_Campus,
+                    ApplicattionId = p.NGO_Application.Application_Id,
+                    PartnershipId = p.Partnership_Id,
+                    RegNumber = p.NGO_Application.Reg_Number,
+                    CBO_Name = p.NGO_Application.Name,
+                    CBO_Email = p.NGO_Application.Email,
+                    CBO_Address = p.NGO_Application.Address,
+                    CBO_Key_Focus = p.NGO_Application.Key_Focus,
+                    //  Collaboration_Request = application.Collaboration_Request,
+                    Description = p.NGO_Application.Description,
+                    Benefits = p.NGO_Application.Benefits,
+                    Notes = p.Notes,
+                    Is_Active = p.Is_Active,
+                    DaysToRenewal = p.DaysToRenewal
+                }).ToListAsync();
+
+
+            return Ok(partnerships);
             }
-            else
-            {
-                return NotFound(new { message = "Could not retrieve the partnership, might be empty!" });
-            }
-        }
+           //----------------------------------Validate-----------------------------------
+        
 
         //get application by its ngos registaion number for director
         [HttpGet("campuspartnerships/specialist/{Id}/partnership/{PartnershipId}/")]
@@ -332,6 +347,10 @@ namespace CommunityEngagementAPI.Controllers
                 var application = await _db.NGO_Application.Where(a => a.Application_Id == partnership.Application_Id && a.Specialist_Id == Id).FirstOrDefaultAsync();
                 var partner = new PartnershipDto
                 {
+                    ClosesCampus = application.Close_Campus,
+                    ApplicattionId = application.Application_Id,
+                    PartnershipId = partnership.Partnership_Id,
+                    RegNumber = application.Reg_Number,
                     CBO_Name = application.Name,
                     CBO_Email = application.Email,
                     CBO_Address = application.Address,
@@ -363,15 +382,25 @@ namespace CommunityEngagementAPI.Controllers
             //    return BadRequest("Invalid role.");
             //}
 
-            var partnershipsActiveness = await _db.NGO_Partnership.Where(p => p.Is_Active.Equals(Is_Active)).OrderByDescending(a=>a.Start_Date).ToListAsync();
-            if (partnershipsActiveness != null)
+            var partnershipsActiveness = await _db.NGO_Partnership.Where(p => p.Is_Active.Equals(Is_Active)).OrderByDescending(a=>a.Start_Date).Select(p => new PartnershipDto
             {
-                return Ok(partnershipsActiveness);
-            }
-            else
-            {
-                return NotFound(new { message = "Something went wrong" });
-            }
+                ClosesCampus = p.NGO_Application.Close_Campus,
+                ApplicattionId = p.NGO_Application.Application_Id,
+                PartnershipId = p.Partnership_Id,
+                RegNumber = p.NGO_Application.Reg_Number,
+                CBO_Name = p.NGO_Application.Name,
+                CBO_Email = p.NGO_Application.Email,
+                CBO_Address = p.NGO_Application.Address,
+                CBO_Key_Focus = p.NGO_Application.Key_Focus,
+                //  Collaboration_Request = application.Collaboration_Request,
+                Description = p.NGO_Application.Description,
+                Benefits = p.NGO_Application.Benefits,
+                Notes = p.Notes,
+                Is_Active = p.Is_Active,
+                DaysToRenewal = p.DaysToRenewal
+            }).ToListAsync();
+
+            return Ok(partnershipsActiveness);
 
         }
 

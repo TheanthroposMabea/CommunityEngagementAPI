@@ -59,10 +59,10 @@ namespace CommunityEngagementAPI.Controllers
             {
                 try
                 {
-                    var partnerCampus = await _db.NGO_Partnership.Where(a => a.NGO_Application.Reg_Number == projectDto.Partner_Id).FirstOrDefaultAsync();
-                    Enum.TryParse<CampusCode>(partnerCampus.NGO_Application.Close_Campus, true, out var Code);
+                    var partnerCampus = await _db.NGO_Partnership.Where(a => a.NGO_Application.Reg_Number == projectDto.Partner_Id).Select(a => a.NGO_Application.Close_Campus).FirstOrDefaultAsync();
+                    Enum.TryParse<CampusCode>(partnerCampus, true, out var Code);
                     campus_id = await _db.Campus.Where(c => c.Code.Equals(Code)).Select(c => c.Campus_Id).FirstOrDefaultAsync();
-
+                    //
                     Console.WriteLine(campus_id);
                 }
                 catch (Exception ex)
@@ -458,7 +458,8 @@ namespace CommunityEngagementAPI.Controllers
             {
                 Project_Id = dto.Project_Id,
                 User_Id = dto.User_Id,
-                Is_Committed = true
+                Is_Committed = true,
+               // Time = DateTime.Now
             };
             _db.Project_Register.Add(addUser);
 

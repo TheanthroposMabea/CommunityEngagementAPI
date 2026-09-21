@@ -3,6 +3,10 @@
     public class PartnershipDto
     {
        
+        public string ClosesCampus { get; set; }
+        public string RegNumber { get; set; }
+        public int ApplicattionId { get; set; }
+        public int PartnershipId { get; set; }
         public int DaysToRenewal { get; set; }
         public bool Is_Active { get; set; }
         public string Notes { get; set; }
