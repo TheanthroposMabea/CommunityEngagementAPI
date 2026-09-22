@@ -612,14 +612,17 @@ namespace CommunityEngagementAPI.Controllers
         public async Task<IActionResult> CurrentVolunteers(int Attendance_Id)
         {
 
-            var registerList = await _db.Attendance_Entry.Where(ae => ae.Attendance_Id == Attendance_Id && ae.Checkout_Time == null).Include(u => u.User).Select(v => new
+            var registerList = await _db.Attendance_Entry.Where(ae => ae.Attendance_Id == Attendance_Id).Include(u => u.User).Select(v => new
                 {
                     v.User.User_Id,
                     v.User.First_Name,
                     v.User.Last_Name,
                     v.Checkin_Time
                 }).ToListAsync();
-
+            if (registerList.IsNullOrEmpty())
+            {
+                return NotFound(new { message = "There is no present list currently." });
+            }
             return Ok(registerList);
         }
 

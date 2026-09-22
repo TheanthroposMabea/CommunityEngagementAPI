@@ -114,7 +114,7 @@ namespace StudentApp.API.Services
                         </p>
 
                         <div style='text-align: center; margin: 24px 0;'>
-                            <a href='http://localhost:3000/forgot-password?token={token}&email={Uri.EscapeDataString(email)}'
+                            <a href='http://localhost:5173/forgot-password?token={token}&email={Uri.EscapeDataString(email)}'
                                style='background-color: #FF6B00; color: white; text-decoration: none; padding: 12px 28px; border-radius: 6px; font-size: 14px; font-weight: bold; display: inline-block;'>
                                 Reset Password
                             </a>
@@ -156,7 +156,7 @@ namespace StudentApp.API.Services
                         </p>
 
                         <div style='text-align: center; margin: 24px 0;'>
-                            <a href='http://localhost:3000/register'
+                            <a href='http://localhost:5173/register'
                                style='background-color: #FF6B00; color: white; text-decoration: none; padding: 12px 28px; border-radius: 6px; font-size: 14px; font-weight: bold; display: inline-block;'>
                                 Register Link
                             </a>
@@ -202,7 +202,7 @@ namespace StudentApp.API.Services
                         </p>
 
                         <div style='text-align: center; margin: 24px 0;'>
-                            <a href='http://localhost:3000/reupload-documents?token={token}&email={Uri.EscapeDataString(email)}&application_id={application_id}'
+                            <a href='http://localhost:5173/ngo/reupload-documents?token={token}&email={Uri.EscapeDataString(email)}&application_id={application_id}'
                                style='background-color: #FF6B00; color: white; text-decoration: none; padding: 12px 28px; border-radius: 6px; font-size: 14px; font-weight: bold; display: inline-block;'>
                                 Reupload Documents
                             </a>

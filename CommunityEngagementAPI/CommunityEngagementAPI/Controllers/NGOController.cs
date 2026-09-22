@@ -288,10 +288,10 @@ namespace CommunityEngagementAPI.Controllers
             
             foreach (var file in reuploadDto.Files)
             {
-                Console.WriteLine($"Uploaded: {file.FileName}");
+                //Console.WriteLine($"Uploaded: {file.FileName}");
                 foreach (var doc in documents)
                 {
-                    Console.WriteLine($"Database: {doc.Name}");
+                   // Console.WriteLine($"Database: {doc.Name}");
                     if (doc.Name == file.FileName)
                     {
                         Console.WriteLine("Matched!");
@@ -301,7 +301,11 @@ namespace CommunityEngagementAPI.Controllers
                     }
                     await _db.SaveChangesAsync();
                 }
+
             }
+
+            application.Status = Status.PendingReview;
+            await _db.SaveChangesAsync();
 
             return Ok(new { message = "You have successfully updated the documents" });
         }
