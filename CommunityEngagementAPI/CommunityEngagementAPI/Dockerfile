@@ -12,10 +12,10 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["CommunityEngagementAPI/CommunityEngagementAPI.csproj", "CommunityEngagementAPI/"]
-RUN dotnet restore "./CommunityEngagementAPI/CommunityEngagementAPI.csproj"
+COPY ["CommunityEngagementAPI/CommunityEngagementAPI/CommunityEngagementAPI.csproj", "CommunityEngagementAPI/CommunityEngagementAPI/"]
+RUN dotnet restore "./CommunityEngagementAPI/CommunityEngagementAPI/CommunityEngagementAPI.csproj"
 COPY . .
-WORKDIR "/src/CommunityEngagementAPI"
+WORKDIR "/src/CommunityEngagementAPI/CommunityEngagementAPI"
 RUN dotnet build "./CommunityEngagementAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
