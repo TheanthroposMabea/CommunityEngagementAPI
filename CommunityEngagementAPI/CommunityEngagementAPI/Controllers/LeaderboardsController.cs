@@ -50,12 +50,8 @@ namespace CommunityEngagementAPI.Controllers
              .ToDictionary(
                  g => g.Key,
                  g => g.Count());
-
-            var hoursByUser = attendanceEntries
-                .GroupBy(a => a.User_Id)
-                .ToDictionary(
-                    g => g.Key,
-                    g => g.Sum(a => a.Hours_Logged ?? 0));
+            //   HoursLogged = await _db.Volunteer.Where(v => v.Volunteer_Id == Volunteer_Id).Select(v => v.Hours).FirstOrDefaultAsync(),
+            var hoursByUser = await _db.Volunteer.Where(v => userIds.Contains(v.Volunteer_Id)).Select(v => v.Hours).FirstOrDefaultAsync();
 
             var assistantAttendances = await _db.Attendance_Register.Where(pr => userIds.Contains(pr.Assistant_Id)  && pr.Project.Status == ProjectStatus.Completed).Include(pr => pr.Project).ToListAsync();
             var Assistanthours = assistantAttendances.GroupBy(a => a.Assistant_Id)
@@ -72,13 +68,11 @@ namespace CommunityEngagementAPI.Controllers
                         : 0;
 
                         var hours = 0.0;
-                    var hour = 0;
-                    if(Role ==UserRoleType.assistant){
+                   // var hour = 0;
+                    if(Role == UserRoleType.assistant){
                         hours = Assistanthours.TryGetValue(u.User_Id,out var totalhours) ? totalhours : 0;
                     }else{
-                        hours = hoursByUser.TryGetValue(u.User_Id, out var totalHours)
-                        ? totalHours
-                        : 0;
+                        hours = hoursByUser;
                     }
                     //  hours = hoursByUser.TryGetValue(u.User_Id, out var totalHours)
                     //     ? totalHours

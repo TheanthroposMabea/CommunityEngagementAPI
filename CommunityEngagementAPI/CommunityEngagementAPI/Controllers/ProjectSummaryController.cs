@@ -241,7 +241,7 @@ namespace CommunityEngagementAPI.Controllers
        [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetAllSummaries()
         {
-                            var summary = await _db.Project_Summary
+                     var summary = await _db.Project_Summary
                     .Include(s => s.Project)
                     .OrderByDescending(s => s.Summary_Id)
                     .Take(1)
