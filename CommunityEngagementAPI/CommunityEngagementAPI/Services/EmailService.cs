@@ -1,5 +1,6 @@
 ﻿using CommunityEngagementAPI.Models;
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using MimeKit;
@@ -45,7 +46,7 @@ namespace StudentApp.API.Services
 
                 var smtp = new SmtpClient();
                 Console.WriteLine("EMAIL: Connecting...");
-                smtp.Connect(host, port);
+                smtp.Connect(host, port, SecureSocketOptions.StartTls);
                 Console.WriteLine("EMAIL: Connected!");
                 Console.WriteLine("EMAIL: Authenticating...");
                 smtp.Authenticate(from, password);
