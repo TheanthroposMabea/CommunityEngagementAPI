@@ -12,7 +12,7 @@ namespace CommunityEngagementAPI.Models
         //public TimeOnly Time_Joined { get; set; }
         public bool Is_Committed { get; set; } = false;
 
-      //  public DateTime Time { get; set; }
+       public DateTime Time { get; set; }
 
         [ForeignKey(nameof(Project_Id))]
         public Project Project { get; set; }

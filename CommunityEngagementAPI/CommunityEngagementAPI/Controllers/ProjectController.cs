@@ -266,6 +266,7 @@ namespace CommunityEngagementAPI.Controllers
                     Title = p.Title,
                     Type = p.Type,
                     Location = p.Location,
+                    Location_Scope = p.Location_Scope.ToString(),
                     Partner = p.Partner.ToString(),
                     Partner_Name = p.Partner_Name,
                     Partner_Id = p.Partner_Id,
@@ -296,6 +297,7 @@ namespace CommunityEngagementAPI.Controllers
                     Title = p.Title,
                     Type = p.Type,
                     Location = p.Location,
+                    Location_Scope = p.Location_Scope.ToString(),
                     Partner = p.Partner.ToString(),
                     Partner_Name = p.Partner_Name,
                     Partner_Id = p.Partner_Id,
@@ -322,6 +324,7 @@ namespace CommunityEngagementAPI.Controllers
                     Title = p.Title,
                     Type = p.Type,
                     Location = p.Location,
+                    Location_Scope = p.Location_Scope.ToString(),
                     Partner = p.Partner.ToString(),
                     Partner_Name = p.Partner_Name,
                     Partner_Id = p.Partner_Id,
@@ -355,7 +358,28 @@ namespace CommunityEngagementAPI.Controllers
        [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetAllProjects()
         {
-            var projects = await _db.Project.OrderByDescending(p=>p.Date_Created).Include(p => p.ProjectRegisters).ToListAsync();
+            var projects = await _db.Project.OrderByDescending(p=>p.Date_Created).Include(p => p.ProjectRegisters).Select(p => new ProjectDto
+            {
+                Project_Id = p.Project_id,
+                Title = p.Title,
+                Type = p.Type,
+                Location = p.Location,
+                Location_Scope = p.Location_Scope.ToString(),
+                Partner = p.Partner.ToString(),
+                Partner_Name = p.Partner_Name,
+                Partner_Id = p.Partner_Id,
+                Category = p.Category.ToString(),
+                Hours = p.Hours,
+                Num_Volunteers = p.Num_Volunteers,
+                Description = p.Description,
+                Target_Group = p.Target_Group,
+                Date = p.Date,
+                Date_Created = p.Date_Created,
+                Is_Published = p.Is_Published,
+                Time = p.Time,
+                Slots = p.Slots,
+                Sdg = _db.Project_Sdg.Where(ps => ps.Project_Id == p.Project_id).Select(s => s.Sdg_Id).ToArray()
+            }).ToListAsync();
             if (projects == null)
             {
                 return NotFound(new { message = "Something went wrong while trying to retrieve projects, might be empty" });
@@ -368,7 +392,28 @@ namespace CommunityEngagementAPI.Controllers
         [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetSpecificProject(int Project_Id)
         {
-            var project = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.Project_id == Project_Id).FirstOrDefaultAsync();
+            var project = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.Project_id == Project_Id).Select(p => new ProjectDto
+            {
+                Project_Id = p.Project_id,
+                Title = p.Title,
+                Type = p.Type,
+                Location = p.Location,
+                Location_Scope = p.Location_Scope.ToString(),
+                Partner = p.Partner.ToString(),
+                Partner_Name = p.Partner_Name,
+                Partner_Id = p.Partner_Id,
+                Category = p.Category.ToString(),
+                Hours = p.Hours,
+                Num_Volunteers = p.Num_Volunteers,
+                Description = p.Description,
+                Target_Group = p.Target_Group,
+                Date = p.Date,
+                Date_Created = p.Date_Created,
+                Is_Published = p.Is_Published,
+                Time = p.Time,
+                Slots = p.Slots,
+                Sdg = _db.Project_Sdg.Where(ps => ps.Project_Id == p.Project_id).Select(s => s.Sdg_Id).ToArray()
+            }).FirstOrDefaultAsync();
             if (project != null)
             {
                 return Ok(project);
@@ -410,7 +455,28 @@ namespace CommunityEngagementAPI.Controllers
                 return BadRequest("Invalid role.");
             }
 
-            var ProjectsInStatus = await _db.Project.Include(p => p.ProjectRegisters).Where(u => u.Status.Equals(appStatus)).OrderByDescending(p=>p.Date_Created).ToListAsync();
+            var ProjectsInStatus = await _db.Project.Include(p => p.ProjectRegisters).Where(u => u.Status.Equals(appStatus)).OrderByDescending(p=>p.Date_Created).Select(p => new ProjectDto
+            {
+                Project_Id = p.Project_id,
+                Title = p.Title,
+                Type = p.Type,
+                Location = p.Location,
+                Location_Scope = p.Location_Scope.ToString(),
+                Partner = p.Partner.ToString(),
+                Partner_Name = p.Partner_Name,
+                Partner_Id = p.Partner_Id,
+                Category = p.Category.ToString(),
+                Hours = p.Hours,
+                Num_Volunteers = p.Num_Volunteers,
+                Description = p.Description,
+                Target_Group = p.Target_Group,
+                Date = p.Date,
+                Date_Created = p.Date_Created,
+                Is_Published = p.Is_Published,
+                Time = p.Time,
+                Slots = p.Slots,
+                Sdg = _db.Project_Sdg.Where(ps => ps.Project_Id == p.Project_id).Select(s => s.Sdg_Id).ToArray()
+            }).ToListAsync();
             if (!ProjectsInStatus.IsNullOrEmpty())
             {
                 return Ok(ProjectsInStatus);
@@ -459,7 +525,7 @@ namespace CommunityEngagementAPI.Controllers
                 Project_Id = dto.Project_Id,
                 User_Id = dto.User_Id,
                 Is_Committed = true,
-               // Time = DateTime.Now
+                Time = DateTime.Now
             };
             _db.Project_Register.Add(addUser);
 
@@ -490,7 +556,7 @@ namespace CommunityEngagementAPI.Controllers
                 });
             }
 
-            return Ok(new { message = "User successfully registered for the project" });
+            return Ok(new { message = "User successfully registered for the project", addUser });
 
         }
 
