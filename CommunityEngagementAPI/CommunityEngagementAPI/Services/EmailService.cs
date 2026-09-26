@@ -45,7 +45,7 @@ namespace StudentApp.API.Services
                 email.Body = body;
 
                 var smtp = new SmtpClient();
-                Console.WriteLine("EMAIL: Connecting..." + from + password + host + port);
+                Console.WriteLine("EMAIL: Connecting..." + from  + host + port);
                 smtp.Connect("smtp.gmail.com", 465, SecureSocketOptions.SslOnConnect);
                 Console.WriteLine("EMAIL: Connected!");
                 Console.WriteLine("EMAIL: Authenticating...");
@@ -57,7 +57,10 @@ namespace StudentApp.API.Services
                 smtp.Disconnect(true);
                 Console.WriteLine("EMAIL: Disconnected!");
             }
-            catch (Exception) { }
+            catch (Exception ex) {
+                Console.WriteLine($"EMAIL ERROR: {ex}");
+                throw;
+            }
         }
         public  async Task SendOTP(string toEmail, string otp)
         {
