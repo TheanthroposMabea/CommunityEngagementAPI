@@ -45,8 +45,8 @@ namespace StudentApp.API.Services
                 email.Body = body;
 
                 var smtp = new SmtpClient();
-                Console.WriteLine("EMAIL: Connecting...");
-                smtp.Connect("smtp.gmail.com", 465, SecureSocketOptions.StartTls);
+                Console.WriteLine("EMAIL: Connecting..." + from + password + host + port);
+                smtp.Connect("smtp.gmail.com", 465, SecureSocketOptions.SslOnConnect);
                 Console.WriteLine("EMAIL: Connected!");
                 Console.WriteLine("EMAIL: Authenticating...");
                 smtp.Authenticate(from, password);
