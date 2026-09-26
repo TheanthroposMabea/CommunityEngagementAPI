@@ -5,6 +5,7 @@ using CommunityEngagementAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using StudentApp.API.Services;
 using System;
@@ -406,6 +407,33 @@ namespace CommunityEngagementAPI.Controllers
 
             return Ok(partnershipsActiveness);
 
+        }
+
+        [HttpGet("lapsedPartnerships")]
+        public async Task<IActionResult> getLapsedPartnerships()
+        {
+            var lapsedPartnerships = await _db.NGO_Partnership.Where(p => p.Is_Active == false && p.Renewal_Date <= DateTime.Now).ToListAsync();
+            return Ok(lapsedPartnerships);
+        }
+
+        [HttpGet("lapsingDeals")]
+        public async Task<IActionResult> getLapsingPartnerships()
+        {
+            
+            var lapsingDeals = await _db.NGO_Partnership.Where(p => p.Is_Active == true && (p.Renewal_Date >= DateTime.Now && p.Renewal_Date <= DateTime.Now.AddDays(15))).Include(p=>p.NGO_Application).ToListAsync();
+            return Ok(new {count = lapsingDeals.Count , partnerships = lapsingDeals});
+        }
+
+        //renew the partnerhsi[ps that has lapsed
+        [HttpPost("renewParnership/{partnerId}")]
+        public async Task<IActionResult> RenewParnership(int partnerId)
+        {
+            var partner = await _db.NGO_Partnership.Where(p => p.Partnership_Id == partnerId && p.Is_Active == false).Include(p=> p.NGO_Application).FirstOrDefaultAsync();
+            if (partner == null) { return NotFound(new { message = "Partner not found or still active" }); }
+            partner.Renewal_Date.AddMonths(12);
+            await _db.SaveChangesAsync();
+             await _emailService.statusUpdateEmail(partner.NGO_Application.Email, Status.Approved);
+            return Ok(new { messsage = "Renewed the parnership successful" });
         }
 
     }

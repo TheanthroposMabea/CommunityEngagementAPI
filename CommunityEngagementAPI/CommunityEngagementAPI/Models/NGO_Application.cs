@@ -9,6 +9,7 @@ namespace CommunityEngagementAPI.Models
         MissingInformation,
         Approved,
         Declined,
+        PartnershipLapsed,
         Reviewed
     }
     public class NGO_Application

@@ -42,6 +42,7 @@ namespace CommunityEngagementAPI.Models
         public virtual DbSet<Suspension> Suspension { get; set; }
         public virtual DbSet<Project_Summary> Project_Summary { get; set; }
         public virtual DbSet<Unregistered_Volunteer> Unregistered_Volunteer { get; set; }
+        public virtual DbSet<Sponsor> Sponsor { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //  Only the composite key needs to be here

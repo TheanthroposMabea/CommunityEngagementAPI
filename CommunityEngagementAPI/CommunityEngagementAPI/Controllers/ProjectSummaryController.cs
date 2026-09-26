@@ -55,7 +55,7 @@ namespace CommunityEngagementAPI.Controllers
 
                 var projectStart = attendance.Project.Date.ToDateTime(attendance.Project.Time);
                 var lateLimitTime = projectStart.AddMinutes(10);
-                var latecomers = await _db.Attendance_Entry.Where(a => a.Checkin_Time > lateLimitTime).CountAsync();
+                var latecomers = await _db.Attendance_Entry.Where(a => a.User.Role == UserRoleType.volunteer && a.Checkin_Time > lateLimitTime).CountAsync();
 
             var projectEnd = projectStart.AddHours(attendance.Project.Hours);
             var completed = await _db.Attendance_Entry.Where(a => a.Checkout_Time > projectEnd).CountAsync();
@@ -206,7 +206,7 @@ namespace CommunityEngagementAPI.Controllers
 
                 Completed_Count = summary.Completed_Count,
 
-                Absent_Count = summary.Absent_Count,
+                Absent_Count = summary.Absent_Count - 1,
 
                 Late_Count = summary.Late_Count,
 

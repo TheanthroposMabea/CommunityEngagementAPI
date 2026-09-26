@@ -55,7 +55,7 @@ namespace CommunityEngagementAPI.Controllers
                 return StatusCode(500, new
                 {
                     message = "Failed to send OTP email",
-                    error = ex.Message
+                    error = ex.ToString()
                 });
             }
             return Ok(new { message = "OTP sent successfully to " + otpDto.Email, sent = true });

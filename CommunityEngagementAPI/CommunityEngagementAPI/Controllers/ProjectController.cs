@@ -159,7 +159,7 @@ namespace CommunityEngagementAPI.Controllers
 
                 try
                 {
-                    await _notificationService.NotifyUser(project.User_Id, "Project Created", "You have published  the project " + project.Title + ". taking place on  - " + project.Date, type);
+                    await _notificationService.NotifyUser(project.User_Id, "Project Created", "You have published  the project " + project.Title + ". taking place on  - " + project.Date + ", ID - " + project.Project_id, type);
                 }
                 catch (Exception ex)
                 {
@@ -195,7 +195,7 @@ namespace CommunityEngagementAPI.Controllers
 
                 try
                 {
-                    await _notificationService.NotifyUser(project.User_Id, "Project CallBack", "You have called back  the project " + project.Title + ". taking place on  - " + project.Date, type);
+                    await _notificationService.NotifyUser(project.User_Id, "Project CallBack", "You have called back  the project " + project.Title + ". taking place on  - " + project.Date + ", ID - " + project.Project_id, type);
                 }
                 catch (Exception ex)
                 {
@@ -242,10 +242,10 @@ namespace CommunityEngagementAPI.Controllers
          : NotificationType.ProjectUpdated;
             if (project.Is_Published == true)
             {
-                await _notificationService.NotifyProjectRegister(project.Project_id, "Project Updated", "Dear Volunteer, please take note of changes made to project: " + oldName + " , Created on : " + project.Date_Created, type);
+                await _notificationService.NotifyProjectRegister(project.Project_id, "Project Updated", "Dear Volunteer, please take note of changes made to project: " + oldName + " , Created on : " + project.Date_Created + ", ID - " + project.Project_id, type);
             }
 
-            await _notificationService.NotifyUser(project.User_Id, "Project Updated", "Dear Specialist, please take note of changes you made to project: " + oldName + " , Created on : " + project.Date_Created, type);
+            await _notificationService.NotifyUser(project.User_Id, "Project Updated", "Dear Specialist, please take note of changes you made to project: " + oldName + " , Created on : " + project.Date_Created + ", ID - " + project.Project_id, type);
 
             return Ok(new { message = "Project Updated." });
         }
@@ -479,7 +479,7 @@ namespace CommunityEngagementAPI.Controllers
             string strProjName = addUser.Project.Title;
             try
             {
-                await _notificationService.NotifyUser(addUser.User_Id, "Joined Project", "You have successfully joined the project " + addUser.Project.Title + ". Please look out for the Project date - " + addUser.Project.Date, type);
+                await _notificationService.NotifyUser(addUser.User_Id, "Joined Project", "You have successfully joined the project " + addUser.Project.Title + ". Please look out for the Project date - " + addUser.Project.Date + ", ID - " + project.Project_id, type);
             }
             catch (Exception ex)
             {
@@ -604,7 +604,7 @@ namespace CommunityEngagementAPI.Controllers
             await _db.SaveChangesAsync();
              await cacheStore.EvictByTagAsync("status-tag", default);
 
-            return Ok(new { message = "Check in successful" });
+            return Ok(new { message = "Check in successful" , entry});
         }
 
         [HttpGet("present/{Attendance_Id}")]

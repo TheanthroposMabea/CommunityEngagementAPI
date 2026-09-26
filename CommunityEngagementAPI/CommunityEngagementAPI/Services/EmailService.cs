@@ -1,5 +1,6 @@
 ﻿using CommunityEngagementAPI.Models;
 using MailKit.Net.Smtp;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using MimeKit;
 using System.Text;
@@ -22,7 +23,20 @@ namespace StudentApp.API.Services
             var host = _config["EmailSettings:Host"];
             var port = int.Parse(_config["EmailSettings:Port"]);
 
-            try {
+            if (string.IsNullOrWhiteSpace(from))
+                throw new Exception("EmailSettings:From is missing");
+
+            if (string.IsNullOrWhiteSpace(password))
+                throw new Exception("EmailSettings:Password is missing");
+
+            if (string.IsNullOrWhiteSpace(host))
+                throw new Exception("EmailSettings:Host is missing");
+            if (string.IsNullOrWhiteSpace(_config["EmailSettings:Port"]))
+                throw new Exception("EmailSettings:Port is missing or invalid");
+
+
+            try
+            {
                 var email = new MimeMessage();
                 email.From.Add(MailboxAddress.Parse(from));
                 email.To.Add(MailboxAddress.Parse(toEmail));

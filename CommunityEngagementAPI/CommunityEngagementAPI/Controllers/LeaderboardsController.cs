@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.OutputCaching;
 
 namespace CommunityEngagementAPI.Controllers
 {
+
+    [ApiController]
+    [Route("api/[controller]")]
     public class LeaderboardsController : ControllerBase
     {
         private readonly CEAppContext _db;
@@ -51,7 +54,8 @@ namespace CommunityEngagementAPI.Controllers
                  g => g.Key,
                  g => g.Count());
             //   HoursLogged = await _db.Volunteer.Where(v => v.Volunteer_Id == Volunteer_Id).Select(v => v.Hours).FirstOrDefaultAsync(),
-            var hoursByUser = await _db.Volunteer.Where(v => userIds.Contains(v.Volunteer_Id)).Select(v => v.Hours).FirstOrDefaultAsync();
+            var hoursByUser = await _db.Volunteer.Where(v => userIds.Contains(v.Volunteer_Id)).ToListAsync();
+            var userHours = hoursByUser.GroupBy(v => v.Volunteer_Id).ToDictionary(g => g.Key, g => g.Sum(v => v.Hours));
 
             var assistantAttendances = await _db.Attendance_Register.Where(pr => userIds.Contains(pr.Assistant_Id)  && pr.Project.Status == ProjectStatus.Completed).Include(pr => pr.Project).ToListAsync();
             var Assistanthours = assistantAttendances.GroupBy(a => a.Assistant_Id)
@@ -68,16 +72,19 @@ namespace CommunityEngagementAPI.Controllers
                         : 0;
 
                         var hours = 0.0;
-                   // var hour = 0;
-                    if(Role == UserRoleType.assistant){
-                        hours = Assistanthours.TryGetValue(u.User_Id,out var totalhours) ? totalhours : 0;
-                    }else{
-                        hours = hoursByUser;
+                    // var hour = 0;
+                    if (Role == UserRoleType.assistant)
+                    {
+                        hours = Assistanthours.TryGetValue(u.User_Id, out var totalhours) ? totalhours : 0;
                     }
-                    //  hours = hoursByUser.TryGetValue(u.User_Id, out var totalHours)
-                    //     ? totalHours
-                     //   : 0;
+                    else
+                    {
+                        //  hours = hoursByUser;
 
+                        hours = userHours.TryGetValue(u.User_Id, out var totalHours)
+                           ? totalHours
+                          : 0;
+                    }
                     return new MostActiveUserDto
                     {
                         UserId = u.User_Id,

@@ -10,10 +10,12 @@ namespace CommunityEngagementAPI.Services
     {
         private readonly IServiceScopeFactory _scopeFactory;
         public readonly EmailService _emailService;
-        public BackgroundService(IServiceScopeFactory scopeFactory ,EmailService emailService)
+        public readonly NotificationService _notificationService;
+        public BackgroundService(IServiceScopeFactory scopeFactory ,EmailService emailService, NotificationService notificationService)
         {
             _scopeFactory = scopeFactory;
             _emailService = emailService;
+            _notificationService = notificationService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -34,6 +36,7 @@ namespace CommunityEngagementAPI.Services
                 {
                     volunteer.Is_Completed = true;
                     var email = await db.User.Where(u => u.User_Id == volunteer.Volunteer_Id).Select(u => u.Email).FirstAsync(stoppingToken);
+                    await _notificationService.NotifyUser(volunteer.Volunteer_Id, "Certificate Completed", "Congratulatios, you have completed your certificate. Please go to certificates and dowanload. Thank you!", NotificationType.CertificateIssued);
                      await emailService.statusUpdateEmail(email, Status);
                 }
                 await db.SaveChangesAsync(stoppingToken);
@@ -48,6 +51,14 @@ namespace CommunityEngagementAPI.Services
 
                 }
                 await db.SaveChangesAsync(stoppingToken);
+                //check the partnership renewal 
+                var partnerRenewal = await db.NGO_Partnership.Where(p => p.Renewal_Date <= DateTime.Now).Include(p=>p.NGO_Application).ToListAsync(stoppingToken);
+                foreach (var partner in partnerRenewal)
+                {
+                    partner.Is_Active = false;
+                    await emailService.statusUpdateEmail(partner.NGO_Application.Email, Status.PartnershipLapsed);
+                    await _notificationService.NotifyUser(partner.NGO_Application.Specialist_Id, "Partnership Has Expired", "The UJ Partnership with " + partner.NGO_Application.Name + " has expired, would you like to renew", NotificationType.NGOStatus);
+                }
 
                 //check projects automatically and notify the responsible user when a project requires attention
                 var intelligenceService = scope.ServiceProvider.GetRequiredService<IIntelligenceService>();
