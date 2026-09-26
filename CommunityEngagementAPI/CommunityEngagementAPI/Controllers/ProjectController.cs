@@ -568,7 +568,7 @@ namespace CommunityEngagementAPI.Controllers
             };
 
             _db.Attendance_Register.Add(attendance);
-            attendance.Project.Status = ProjectStatus.Active;
+           // attendance.Project.Status = ProjectStatus.Active;
             await _db.SaveChangesAsync();
             
             await cacheStore.EvictByTagAsync("status-tag", default);
