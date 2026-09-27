@@ -358,7 +358,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("projects")]
-       [OutputCache(PolicyName = "StatusPolicy")]
+   //    [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetAllProjects()
         {
             var projects = await _db.Project.OrderByDescending(p=>p.Date_Created).Include(p => p.ProjectRegisters).Select(p => new ProjectDto
@@ -394,7 +394,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("{Project_Id}")]
-        [OutputCache(PolicyName = "StatusPolicy")]
+    //    [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetSpecificProject(int Project_Id)
         {
             var project = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.Project_id == Project_Id).Select(p => new ProjectDto
@@ -432,7 +432,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("myproject-by-sdgs/{Volunteer_Id}")]
-        [OutputCache(PolicyName = "StatusPolicy")]
+    //    [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> MyProjectsBySds(int Volunteer_Id)
         {
             var volunteer = await _db.Volunteer.Include(v => v.VolunteerSdgs).FirstOrDefaultAsync(v => v.Volunteer_Id == Volunteer_Id);
@@ -454,7 +454,7 @@ namespace CommunityEngagementAPI.Controllers
 
         //get project by status
         [HttpGet("projects/status/{Status}")]
-        [OutputCache(PolicyName = "StatusPolicy")]
+    //    [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetProjectsByStatus(string Status)
         {
             if (!Enum.TryParse<ProjectStatus>(Status, true, out var appStatus))
@@ -569,7 +569,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("projects-joined/{Volunteer_Id}")]
-         [OutputCache(PolicyName = "StatusPolicy")]
+       //  [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetProjectJoined(int Volunteer_Id)
         {
             var registeredProjects = await _db.Project_Register.Where(u => u.User_Id == Volunteer_Id && u.Is_Committed == true).Select(p => new ProjectDto
@@ -627,17 +627,13 @@ namespace CommunityEngagementAPI.Controllers
             if (regAssistant == null) { return BadRequest(new { message = "Something went wrong while retriving project and assistant details - the project is might not active" }); }
             //check if the project date is correct and due
             var project = await _db.Project.FindAsync(dto.Project_Id); if (project == null) return BadRequest(new { message = "Project not found" });
-            if (project.Date != DateOnly.FromDateTime(DateTime.Now))
-            {
-                DateOnly date = DateOnly.FromDateTime(DateTime.Now);
-                return BadRequest(new { message = "Wait for project's set date to create attenndance", project.Date, date });
-            }
+           
 
             var attendance = new Attendance_Register
             {
                 Project_Id = dto.Project_Id,
                 Assistant_Id = dto.Assistant_Id,
-              
+                Created_At = DateTime.Now,
                 Checkinqr_Token = dto.CheckInQr_Token,
                 Checkoutqr_Token = null,
             };
