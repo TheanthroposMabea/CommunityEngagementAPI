@@ -700,6 +700,25 @@ namespace CommunityEngagementAPI.Controllers
             return Ok(registerList);
         }
 
+        [HttpGet("participants/{Project_Id}")]
+        [OutputCache(PolicyName = "StatusPolicy")]
+        public async Task<IActionResult> JoinedVolunteers(int Project_Id)
+        {
+
+            var registerList = await _db.Project_Register.Where(p=>p.Project_Id == Project_Id).Include(u => u.User).Select(v => new
+            {
+                v.User.User_Id,
+                v.User.First_Name,
+                v.User.Last_Name,
+                v.Time
+            }).ToListAsync();
+            if (registerList.IsNullOrEmpty())
+            {
+                return NotFound(new { message = "There is no present list currently." });
+            }
+            return Ok(registerList);
+        }
+
         [HttpPost("create-checkoutqr")]
         public async Task<IActionResult> OpenCheckout([FromBody] CheckOutDto dto,[FromServices] IOutputCacheStore cacheStore)
         {

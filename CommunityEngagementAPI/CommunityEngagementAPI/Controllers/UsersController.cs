@@ -105,6 +105,7 @@ namespace CommunityEngagementAPI.Controllers
 
             var usersInRole = await _db.User.Where(u => u.Role.Equals(userRole)).Select(u => new UserDto()
             {
+                User_Id = u.User_Id,
                 First_Name = u.First_Name,
                 Last_Name = u.Last_Name,
                 Email = u.Email,

@@ -45,7 +45,7 @@ namespace CommunityEngagementAPI.Controllers
 
             var projectRegisters = await _db.Project_Register
               .AsNoTracking()
-              .Where(p => userIds.Contains(p.User_Id))
+              .Where(p => userIds.Contains(p.User_Id)&& p.Project.Status == ProjectStatus.Completed)
               .ToListAsync();
 
 
@@ -58,7 +58,7 @@ namespace CommunityEngagementAPI.Controllers
             var hoursByUser = await _db.Volunteer.Where(v => userIds.Contains(v.Volunteer_Id)).ToListAsync();
             var userHours = hoursByUser.GroupBy(v => v.Volunteer_Id).ToDictionary(g => g.Key, g => g.Sum(v => v.Hours));
             if (userHours.IsNullOrEmpty()) { return BadRequest("This is empty bro"); }
-
+            Console.WriteLine(userHours);
             var assistantAttendances = await _db.Attendance_Register.Where(pr => userIds.Contains(pr.Assistant_Id)  && pr.Project.Status == ProjectStatus.Completed).Include(pr => pr.Project).ToListAsync();
             var Assistanthours = assistantAttendances.GroupBy(a => a.Assistant_Id)
                 .ToDictionary(
@@ -98,7 +98,7 @@ namespace CommunityEngagementAPI.Controllers
                 })
                 .OrderByDescending(x => x.ProjectsJoined)
                 .ThenByDescending(x => x.Hours)
-                .Take(10)
+                .Take(30)
                 .ToList();
 
 
