@@ -13,6 +13,8 @@
         public string? Partner_Id { get; set; }
         public string Category { get; set; }
         public int Hours { get; set; }
+
+        public int Campus_Id { get; set; }
         public int Num_Volunteers { get; set; }
         public string? Status { get; set; }
         public string Description { get; set; }
