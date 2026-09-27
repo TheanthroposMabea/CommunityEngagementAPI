@@ -976,12 +976,6 @@ COPY public."__EFMigrationsHistory" (migration_id, product_version) FROM stdin;
 --
 
 COPY public.alumni (alumni_id, year_graduated, department) FROM stdin;
-31	2021-12-10	Department of Psychology
-32	2020-12-10	Academy of Computer Science and Software Engineering
-33	2022-12-10	Department of Marketing Management
-34	2019-12-10	Department of Finance and Investment Management
-35	2021-12-10	Department of Social Work
-36	2018-12-10	Department of Public Management and Governance
 \.
 
 
@@ -990,35 +984,6 @@ COPY public.alumni (alumni_id, year_graduated, department) FROM stdin;
 --
 
 COPY public.attendance_entry (attendance_entry_id, checkin_time, checkout_time, user_id, attendance_id, hours_logged) FROM stdin;
-1	2026-07-31 09:00:00	2026-07-31 13:00:00	26	1	4
-2	2026-07-31 09:00:00	2026-07-31 12:30:00	27	1	3.5
-3	2026-07-31 09:00:00	2026-07-31 13:00:00	31	1	4
-4	2026-07-31 09:00:00	2026-07-31 11:00:00	33	1	2
-5	2026-08-01 10:00:00	2026-08-02 04:00:00	26	2	18
-6	2026-08-01 10:00:00	2026-08-02 03:00:00	28	2	17
-7	2026-08-01 10:00:00	2026-08-02 06:00:00	29	2	20
-8	2026-08-01 10:00:00	2026-08-02 01:00:00	32	2	15
-9	2026-07-15 14:00:00	2026-07-17 04:00:00	26	3	38
-10	2026-07-15 14:00:00	2026-07-16 14:00:00	27	3	24
-11	2026-07-15 14:00:00	2026-07-17 06:00:00	29	3	40
-12	2026-07-15 14:00:00	2026-07-16 12:00:00	30	3	22
-13	2026-07-15 14:00:00	2026-07-16 16:00:00	35	3	26
-14	2026-07-20 08:30:00	2026-07-20 16:30:00	26	4	8
-15	2026-07-20 08:30:00	2026-07-20 16:30:00	29	4	8
-16	2026-07-20 08:30:00	2026-07-20 15:30:00	34	4	7
-17	2026-07-25 09:00:00	2026-07-25 15:00:00	26	5	6
-18	2026-07-25 09:00:00	2026-07-25 14:30:00	28	5	5.5
-19	2026-07-25 09:00:00	2026-07-25 15:00:00	31	5	6
-20	2026-08-10 11:00:00	2026-08-11 07:00:00	26	6	20
-21	2026-08-10 11:00:00	2026-08-11 07:00:00	29	6	20
-22	2026-08-05 08:00:00	2026-08-05 13:00:00	26	7	5
-23	2026-08-05 08:00:00	2026-08-05 12:30:00	27	7	4.5
-24	2026-08-05 08:00:00	2026-08-05 13:00:00	28	7	5
-25	2026-08-05 08:00:00	2026-08-05 13:00:00	35	7	5
-26	2026-08-08 13:00:00	2026-08-09 04:00:00	26	8	15
-27	2026-08-08 13:00:00	2026-08-09 04:00:00	29	8	15
-28	2026-08-08 13:00:00	2026-08-08 22:00:00	30	8	9
-29	2026-08-08 13:00:00	2026-08-08 23:00:00	33	8	10
 \.
 
 
@@ -1027,14 +992,6 @@ COPY public.attendance_entry (attendance_entry_id, checkin_time, checkout_time, 
 --
 
 COPY public.attendance_register (attendance_id, created_at, project_id, assistant_id, checkinqr_token, checkoutqr_token) FROM stdin;
-1	2026-07-30 08:00:00	1	18	CHK-1-35	OUT-1-35
-2	2026-07-30 08:00:00	2	18	CHK-1-38	OUT-1-38
-3	2026-07-30 08:00:00	3	19	CHK-2-33	OUT-2-33
-4	2026-07-30 08:00:00	4	19	CHK-2-34	OUT-2-34
-5	2026-07-30 08:00:00	5	20	CHK-3-33	OUT-3-33
-6	2026-07-30 08:00:00	6	20	CHK-3-35	OUT-3-35
-7	2026-07-30 08:00:00	7	21	CHK-4-29	OUT-4-29
-8	2026-07-30 08:00:00	8	21	CHK-4-40	OUT-4-40
 \.
 
 
@@ -1055,9 +1012,6 @@ COPY public.campus (campus_id, code, name) FROM stdin;
 --
 
 COPY public.certificate (certificate_id, total_hours, total_projects, date_issued, user_id) FROM stdin;
-1	114	8	2026-08-19 03:34:31.809109	26
-2	103	6	2026-08-19 03:34:31.809109	29
-3	100	5	2026-08-24 21:30:14	3
 \.
 
 
@@ -1189,11 +1143,6 @@ COPY public.faculty (faculty_id, name, code) FROM stdin;
 --
 
 COPY public.ngo_application (application_id, name, email, close_campus, address, rep_name, rep_position, rep_phone, key_focus, collaboration_request, status, is_viewed, date_submitted, specialist_id, website, reg_number, description, benefits) FROM stdin;
-1	Alexandra Community Trust	info@alexcommunitytrust.org.za	APK	12 Roosevelt St, Alexandra, Johannesburg	Nomsa Khoza	Programme Director	+27824000001	Poverty alleviation	Volunteer placements for community surveys	PendingReview	f	2026-06-01 09:12:00	2	https://alexcommunitytrust.org.za	2019/123456/08	NGO supporting low-income households in Alexandra with food and clothing drives.	Access to student volunteers for fieldwork and logistics support.
-2	Bunting Community Garden	hello@buntinggarden.org.za	APB	22 Main Road, Bunting Road, Johannesburg	Lerato Mokoena	Coordinator	+27824000002	Food security	Student volunteers for garden maintenance	Approved	t	2026-05-15 10:30:00	7	https://buntinggarden.org.za	2018/445566/08	Community food garden and nutrition programme.	Volunteer labour and student research support.
-4	FuturePath Network	contact@futurepath.org.za	SWC	41 Vilakazi Street, Soweto	Thandi Maseko	Partnership Lead	+27824000004	Youth development	Career readiness and mentoring collaboration	Approved	t	2026-05-25 14:00:00	15	https://futurepath.org.za	2020/778899/08	Youth employability and mentorship organisation.	Student mentors and workshop facilitators.
-5	Code4Community	hello@code4community.org.za	APK	7 University Road, Auckland Park	Sello Molefe	Director	+27824000005	Digital skills	Coding workshop collaboration	MissingInformation	f	2026-06-10 08:45:00	4	\N	2021/112233/08	Technology education initiative for young people.	Student volunteers and specialist mentorship.
-3	HealthReach Gauteng	info@healthreach.org.za	DFC	9 Commissioner Street, Johannesburg	Dr Kabelo Dube	Programme Manager	+27824000003	Public health	Health awareness and screening volunteers	Approved	t	2026-05-20 11:00:00	10	https://healthreach.org.za	2017/334455/08	Community wellness and preventative health initiatives.	Volunteer support during outreach events.
 \.
 
 
@@ -1202,9 +1151,6 @@ COPY public.ngo_application (application_id, name, email, close_campus, address,
 --
 
 COPY public.ngo_partnership (partnership_id, start_date, renewal_date, is_active, notes, application_id) FROM stdin;
-1	2026-06-01	2027-06-01	t	Active food security partnership.	2
-2	2026-06-05	2027-06-05	t	Health outreach partnership.	3
-3	2026-06-10	2027-06-10	t	Youth career readiness partnership.	4
 \.
 
 
@@ -1213,17 +1159,6 @@ COPY public.ngo_partnership (partnership_id, start_date, renewal_date, is_active
 --
 
 COPY public.ngo_sdg (ngo_id, sdg_id) FROM stdin;
-1	1
-1	10
-2	2
-2	11
-2	12
-3	3
-3	10
-4	4
-4	8
-5	4
-5	9
 \.
 
 
@@ -1232,13 +1167,6 @@ COPY public.ngo_sdg (ngo_id, sdg_id) FROM stdin;
 --
 
 COPY public.notification (notification_id, title, message, type, created_at, user_id, is_read, created_by_id) FROM stdin;
-1	Project joined	You successfully joined the Winter Clothing Drive for Alexandra.	ProjectJoined	2026-07-20 09:00:00	26	f	1
-2	Attendance confirmed	Your attendance was recorded for the Soweto Youth Mentorship Programme.	AttendanceConfirmed	2026-07-15 17:00:00	26	f	18
-3	Certificate issued	You have exceeded 100 volunteer hours and earned a certificate.	CertificateIssued	2026-08-12 15:00:00	26	f	\N
-4	NGO application submitted	A new NGO application is awaiting review.	ApplicationSubmitted	2026-06-01 09:15:00	1	f	2
-5	Project created	A new community project has been created at your campus.	ProjectCreated	2026-07-20 10:00:00	21	f	14
-6	General update	Please review outstanding community engagement reports.	GeneralAdmin	2026-08-15 08:00:00	22	f	1
-7	Joined Project	You have successfully joined the project Digital Literacy Workshops for Seniors. Please look out for the Project date - 2026/09/19	ProjectJoined	2026-09-14 23:01:00.349954	4	f	\N
 \.
 
 
@@ -1263,16 +1191,6 @@ COPY public.picture (data, picture_id, user_id, type) FROM stdin;
 --
 
 COPY public.project (project_id, title, type, location, location_scope, hours, num_volunteers, status, category, description, target_group, date, date_created, campus_id, user_id, partner, partner_name, partner_id, is_published, "time", slots) FROM stdin;
-4	Community Garden and Food Security	Outreach	Bunting Road, Johannesburg	Local	8	12	Completed	OrganisedOutreach	Build food gardens and train households in sustainable food production.	Food-insecure households	2026-07-20	2026-01-05	1	2	CBO	Bunting Community Garden	2018/445566/08	t	08:30:00	12
-1	Winter Clothing Drive for Alexandra	Outreach	Alexandra, Johannesburg	Local	4	15	Completed	CommunityBasedResearch	Collect and distribute winter clothing to households identified in the Alexandra ward survey.	Low-income households	2026-07-31	2026-01-05	1	2	CBO	Alexandra Community Trust	2013/901234/08	t	09:00:00	15
-5	Health Screening and Wellness Day	Outreach	Doorfontein, Johannesburg	Regional	6	18	Completed	ServiceLearning	Provide basic health screening, wellness education and referral information.	Local residents	2026-07-25	2026-01-05	1	2	NPO	HealthReach Gauteng	2017/334455/08	t	09:00:00	18
-10	Youth Coding and Innovation Bootcamp	Workshop	Bunting Road, Johannesburg	Regional	16	12	Cancelled	ServiceLearning	Coding and innovation workshops for young people.	High-school learners	2026-08-19	2026-01-05	2	6	NPO	Code4Community	2021/112233/08	f	13:30:00	12
-8	Career Readiness for Final-Year Students	Workshop	Soweto, Johannesburg	National	5	16	Completed	ServiceLearning	CV writing, interview preparation and workplace readiness sessions.	Final-year students	2026-08-08	2026-01-05	4	14	NPO	FuturePath Network	2020/778899/08	t	13:00:00	16
-3	Soweto Youth Mentorship Programme	Mentorship	Soweto, Johannesburg	Local	2	20	Completed	OrganisedOutreach	Pairs student volunteers with at-risk youth for weekly mentoring sessions.	At-risk youth	2026-07-15	2026-01-05	1	2	DEPARTMENT	Dept. of Social Development	2019/123456/08	t	14:00:00	20
-7	Soweto Environmental Clean-up	Outreach	Soweto, Johannesburg	Local	5	25	Completed	OrganisedOutreach	Community clean-up focused on litter removal and recycling education.	Youth and residents	2026-08-05	2026-01-05	4	14	DEPARTMENT	City Environmental Unit	2019/123456/08	t	08:00:00	25
-6	Digital Skills for Small Businesses	Workshop	Doorfontein, Johannesburg	Regional	8	10	Pending	ServiceLearning	Help small businesses improve digital record keeping and online presence.	Small business owners	2026-09-19	2026-01-05	3	10	CBO	UJ Enterprise Support	2018/445566/08	t	14:00:00	10
-9	Water Conservation Awareness Campaign	Outreach	Alexandra, Johannesburg	Local	7	14	Pending	CommunityBasedResearch	Community education campaign on household water conservation.	Households	2026-09-15	2026-01-05	1	2	CBO	Alexandra Water Forum	2016/998877/08	t	09:00:00	14
-2	Digital Literacy Workshops for Seniors	Workshop	Soweto, Johannesburg	Regional	5	8	Pending	ServiceLearning	Weekly workshops teaching basic smartphone and internet skills to elderly residents.	Senior citizens	2026-09-19	2026-01-05	1	2	NPO	Age-in-Action SA	2012/012345/08	t	14:00:00	8
 \.
 
 
@@ -1281,37 +1199,6 @@ COPY public.project (project_id, title, type, location, location_scope, hours, n
 --
 
 COPY public.project_register (project_id, user_id, is_committed, "time") FROM stdin;
-1	26	t	\N
-1	27	t	\N
-1	31	t	\N
-1	33	t	\N
-2	26	t	\N
-2	28	t	\N
-2	29	t	\N
-2	32	t	\N
-3	26	t	\N
-3	27	t	\N
-3	29	t	\N
-3	30	t	\N
-3	35	t	\N
-4	26	t	\N
-4	29	t	\N
-4	34	t	\N
-5	26	t	\N
-5	28	t	\N
-5	31	t	\N
-6	26	t	\N
-6	29	t	\N
-7	26	t	\N
-7	27	t	\N
-7	28	t	\N
-7	35	t	\N
-8	26	t	\N
-8	29	t	\N
-8	30	t	\N
-8	33	t	\N
-10	29	t	\N
-2	4	t	\N
 \.
 
 
@@ -1320,35 +1207,6 @@ COPY public.project_register (project_id, user_id, is_committed, "time") FROM st
 --
 
 COPY public.project_sdg (project_id, sdg_id) FROM stdin;
-1	1
-1	10
-1	12
-2	4
-2	10
-3	4
-3	10
-3	16
-4	2
-4	11
-4	12
-4	13
-5	3
-5	10
-6	8
-6	9
-7	11
-7	12
-7	13
-7	15
-8	4
-8	8
-9	6
-9	11
-9	12
-9	13
-10	4
-10	9
-10	10
 \.
 
 
@@ -1357,14 +1215,6 @@ COPY public.project_sdg (project_id, sdg_id) FROM stdin;
 --
 
 COPY public.project_summary (summary_id, total_registered, total_volunteered, completed_count, absent_count, late_count, total_hours, average_hours, male_count, female_count, student_count, alumni_count, completion_notes, generated_at, project_id) FROM stdin;
-1	4	4	4	0	0	54	3.375	1	3	2	2	Seeded summary generated from attendance data.	2026-08-19 03:34:31.809109	1
-2	4	4	4	0	0	280	17.5	3	1	3	1	Seeded summary generated from attendance data.	2026-08-19 03:34:31.809109	2
-3	5	5	5	0	0	750	30	3	2	4	1	Seeded summary generated from attendance data.	2026-08-19 03:34:31.809109	3
-4	3	3	3	0	0	69	7.666666666666667	2	1	2	1	Seeded summary generated from attendance data.	2026-08-19 03:34:31.809109	4
-5	3	3	3	0	0	52.5	5.833333333333333	1	2	2	1	Seeded summary generated from attendance data.	2026-08-19 03:34:31.809109	5
-6	2	2	2	0	0	80	20	2	0	2	0	Seeded summary generated from attendance data.	2026-08-19 03:34:31.809109	6
-7	4	4	4	0	0	78	4.875	2	2	3	1	Seeded summary generated from attendance data.	2026-08-19 03:34:31.809109	7
-8	4	4	4	0	0	196	12.25	2	2	3	1	Seeded summary generated from attendance data.	2026-08-19 03:34:31.809109	8
 \.
 
 
@@ -1373,9 +1223,6 @@ COPY public.project_summary (summary_id, total_registered, total_volunteered, co
 --
 
 COPY public.qrcode (qrcode_id, qrcode_token, time_expires, user_id, project_id) FROM stdin;
-1	QR-1-CHECKIN	2026-07-31 21:00:00	18	1
-2	QR-3-CHECKIN	2026-07-16 02:00:00	19	3
-3	QR-8-CHECKIN	2026-08-09 01:00:00	21	8
 \.
 
 
@@ -1384,9 +1231,6 @@ COPY public.qrcode (qrcode_id, qrcode_token, time_expires, user_id, project_id) 
 --
 
 COPY public.report (report_id, notes, status, date_created, user_id, project_id) FROM stdin;
-1	Attendance report requires review.	PendingReview	2026-08-15 12:00:00	2	1
-2	Project completion report submitted for assistant review.	AssistantReviewed	2026-08-15 12:00:00	21	7
-3	Career readiness project report reviewed.	Reviewed	2026-08-15 12:00:00	15	8
 \.
 
 
@@ -1436,17 +1280,6 @@ COPY public.staff (staff_id, department) FROM stdin;
 --
 
 COPY public.student (student_id, student_number, year_of_study, qualification, department) FROM stdin;
-26	202301002	Third	Bachelor of Commerce in Business Management	Department of Business Management
-27	202301003	Second	Bachelor of Education	Department of Childhood Education
-28	202301004	Fourth	BEng Civil Engineering	School of Civil Engineering and the Built Environment
-29	202301005	Third	Bachelor of Information Management	Department of Information and Knowledge Management
-30	202301006	Fourth	BCom Accountancy	Department of Accountancy
-4	202301008	First	Bachelor of Education	Department of Childhood Education
-5	202301009	Second	BCom Accountancy	Department of Accountancy
-7	202301010	Fourth	BCom Accountancy	Department of Accountancy
-8	202301011	First	BEng Civil Engineering	School of Civil Engineering and the Built Environment
-9	202301012	Third	Bachelor of Information Management	Department of Information and Knowledge Management
-11	202301013	Fourth	BCom Accountancy	Department of Accountancy
 \.
 
 
@@ -1455,9 +1288,6 @@ COPY public.student (student_id, student_number, year_of_study, qualification, d
 --
 
 COPY public.suspension (suspension_id, start_date, end_date, is_active, user_id) FROM stdin;
-1	2026-07-01	2026-07-15	f	32
-2	2026-08-01	2026-08-07	f	35
-3	2026-08-19	2026-08-20	t	5
 \.
 
 
@@ -1466,10 +1296,6 @@ COPY public.suspension (suspension_id, start_date, end_date, is_active, user_id)
 --
 
 COPY public.unregistered_volunteer (id, email, name, surname, campus_id, hours) FROM stdin;
-1	walkin1@example.org	Sam	Mokoena	1	6
-2	walkin2@example.org	Lebo	Ndlovu	2	3.5
-3	walkin3@example.org	Chris	Naidoo	3	8
-4	walkin4@example.org	Masego	Dube	4	4
 \.
 
 
@@ -1478,42 +1304,11 @@ COPY public.unregistered_volunteer (id, email, name, surname, campus_id, hours) 
 --
 
 COPY public."user" (user_id, first_name, last_name, email, phone, id_number, password, date_created, campus_id, is_active, is_suspended, role, faculty_id) FROM stdin;
-1	Fiona	Director	director@uj.ac.za	+27821000001	STF10001	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-01-05	1	t	f	director	\N
-2	Naledi	Dlamini	apk.spec1@uj.ac.za	+27821000002	STF10002	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-01-16	1	t	f	specialist	1
-6	Sipho	Mokoena	apb.spec1@uj.ac.za	+27821000006	STF10006	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-02-05	2	t	f	specialist	4
-10	Precious	Mahlangu	dfc.spec1@uj.ac.za	+27821000010	STF10010	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-02-25	3	t	f	specialist	8
-14	Lindiwe	Zulu	swc.spec1@uj.ac.za	+27821000014	STF10014	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-15	4	t	f	specialist	8
-19	Precious	Mahlangu	apb.assistant@uj.ac.za	+27822000002	STF20002	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-06	2	t	f	assistant	4
-20	Mpho	Molefe	dfc.assistant@uj.ac.za	+27822000003	STF20003	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-07	3	t	f	assistant	8
-21	Refilwe	Mokoena	swc.assistant@uj.ac.za	+27822000004	STF20004	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-07	4	t	f	assistant	8
-22	Zanele	Khumalo	staff@uj.ac.za	+27823000001	STF30001	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-01	1	t	f	staff	1
-23	Brian	Pillay	staff.apb@uj.ac.za	+27823000002	STF30002	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-02	2	t	f	staff	4
-24	Nomsa	Dlamini	staff.dfc@uj.ac.za	+27823000003	STF30003	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-03	3	t	f	staff	8
-25	Thabo	Molefe	staff.swc@uj.ac.za	+27823000004	STF30004	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-04	4	t	f	staff	8
-26	Dean	Adams	dean.adams@student.uj.ac.za	+27821000019	202301002	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2023-04-02	2	t	f	volunteer	2
-28	Chantelle	Naidoo	chantelle.naidoo@student.uj.ac.za	+27821000021	202301004	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2023-04-04	4	t	f	volunteer	4
-29	Katlego	Mabaso	katlego.mabaso@student.uj.ac.za	+27821000022	202301005	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2023-04-05	1	t	f	volunteer	2
-30	Werner	Steyn	werner.steyn@student.uj.ac.za	+27821000023	202301006	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2023-04-06	2	t	f	volunteer	1
-33	Palesa	Moloi	palesa.moloi@gmail.com	+27821000026	201801009	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2023-04-09	1	t	f	volunteer	1
-34	Riaan	Coetzee	riaan.coetzee@gmail.com	+27821000027	201801010	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2023-04-10	2	t	f	volunteer	2
-15	Keitumetse	Molefe	swc.vol2@uj.ac.za	+27821000015	STF10015	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-20	4	t	f	volunteer	8
-17	Zanele	Khumalo	swc.vol4@uj.ac.za	+27821000017	STF10017	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-30	4	t	f	volunteer	7
-31	Nomvula	Cele	nomvula.cele@gmail.com	+27821000024	201801007	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2023-04-07	3	t	t	volunteer	3
-5	Farai	Chikwara	apk.vol4@uj.ac.za	+27821000005	STF10005	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-02-01	1	t	t	volunteer	3
-9	Johan	Botha	apb.vol4@uj.ac.za	+27821000009	STF10009	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-02-20	2	t	f	volunteer	7
-7	Thabiso	Nkosi	apb.vol2@uj.ac.za	+27821000007	STF10007	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-02-10	2	t	f	volunteer	5
-4	Amanda	Merwe	apk.vol3@uj.ac.za	+27821000004	STF10004	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-01-25	1	t	f	volunteer	2
-12	Amanda	Ndlovu	dfc.vol3@uj.ac.za	+27821000012	STF10012	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-05	3	t	f	volunteer	9
-8	Lerato	Molefe	apb.vol3@uj.ac.za	+27821000008	STF10008	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-02-15	2	t	f	volunteer	6
-16	David	Mthembu	swc.vol3@uj.ac.za	+27821000016	STF10016	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-25	4	t	f	volunteer	7
-13	Musa	Dube	dfc.vol4@uj.ac.za	+27821000013	STF10013	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-10	3	t	f	volunteer	9
-11	Kagiso	Maseko	dfc.vol2@uj.ac.za	+27821000011	STF10011	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-01	3	t	f	volunteer	9
-36	Grant	Pillay	grant.pillay@gmail.com	+27821000029	201801012	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2023-04-12	4	f	f	volunteer	4
-27	Mpho	Letsoalo	mpho.letsoalo@student.uj.ac.za	+27821000020	202301003	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2023-04-03	3	f	f	volunteer	3
-18	Johan	Botha	apk.vol2@uj.ac.za	+27822000001	STF20001	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-03-06	1	t	f	volunteer	1
-3	Siyabonga	Mokoena	apk.assistant@uj.ac.za	+27821000003	STF10003	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-01-20	1	t	f	assistant	1
-35	Thandeka	Ngwenya	thandeka.ngwenya@gmail.com	+27821000028	201801011	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2023-04-11	1	t	t	volunteer	3
-32	Brandon	Smith	brandon.smith@gmail.com	+27821000025	201801008	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2023-04-08	1	f	f	volunteer	4
+1	Director	Fiona	director@uj.ac.za	+0000000001	#UJ-1	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-09-26	1	t	f	director	1
+2	Specialist	Thabo	apk.specialist@uj.ac.za	+0000000002	#UJ-2	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-09-27	1	t	f	specialist	1
+3	Specialist	Naledi	apb.specialist@uj.ac.za	+0000000003	#UJ-3	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-09-27	2	t	f	specialist	1
+4	Specialist	Zakumi	dfc.specialist@uj.ac.za	+0000000004	#UJ-4	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-09-27	3	t	f	specialist	1
+5	Specialist	Kalito	swc.specialist@uj.ac.za	+0000000005	#UJ-5	f80c0cdc6d9c62253cd6a76ba2d5ef5d9b13e9	2026-09-27	4	t	f	specialist	1
 \.
 
 
@@ -1522,25 +1317,6 @@ COPY public."user" (user_id, first_name, last_name, email, phone, id_number, pas
 --
 
 COPY public.user_demographics (user_id, geo_area, home_language, gender, is_international) FROM stdin;
-26	Alexandra	Sepedi	Male	t
-27	Soweto	isiZulu	Female	f
-28	Tembisa	Setswana	Female	f
-29	Roodepoort	English	Male	f
-30	Midrand	Sesotho	Female	f
-31	Alexandra	isiXhosa	Female	f
-32	Soweto	Sepedi	Male	f
-33	Tembisa	isiZulu	Female	t
-34	Roodepoort	Setswana	Female	f
-35	Midrand	English	Male	f
-36	Alexandra	Sesotho	Female	f
-3	Alex	Sepedi	Male	f
-4	Motheo	Sesotho	Male	f
-5	Midrand	isiXhosa	Female	f
-7	AuklandPark	Setswana	Female	f
-8	Soweto	isiZulu	Male	f
-9	Roodepoort	English	Male	t
-11	Tembisa	English	Female	t
-12	Alexandra	Sesotho	Female	f
 \.
 
 
@@ -1549,26 +1325,6 @@ COPY public.user_demographics (user_id, geo_area, home_language, gender, is_inte
 --
 
 COPY public.volunteer (volunteer_id, volunteer_type, is_completed, recruiter_id, hours) FROM stdin;
-26	Student	t	\N	114
-27	Student	f	\N	32
-28	Student	f	\N	27.5
-29	Student	t	\N	103
-30	Student	f	\N	31
-31	Alumni	f	\N	10
-32	Alumni	f	\N	15
-33	Alumni	f	\N	12
-34	Alumni	f	\N	7
-35	Alumni	f	\N	31
-36	Alumni	f	\N	0
-4	Student	t	\N	100
-5	Student	f	\N	80
-7	Student	f	\N	55
-8	Student	f	\N	58
-9	Student	f	\N	21
-11	Student	f	\N	68
-12	Alumni	t	\N	100
-3	Alumni	t	\N	100
-18	Student	f	\N	79
 \.
 
 
@@ -1577,44 +1333,6 @@ COPY public.volunteer (volunteer_id, volunteer_type, is_completed, recruiter_id,
 --
 
 COPY public.volunteer_sdg (volunteer_id, sdg_id) FROM stdin;
-26	1
-26	10
-27	4
-27	10
-28	3
-28	10
-29	4
-29	9
-30	8
-30	12
-31	1
-31	10
-32	8
-32	9
-33	8
-33	12
-34	8
-34	10
-35	3
-35	10
-36	4
-36	16
-3	1
-4	2
-5	2
-7	3
-8	4
-9	1
-11	5
-12	6
-3	2
-4	3
-5	3
-7	4
-8	3
-9	2
-11	2
-12	1
 \.
 
 
@@ -1622,21 +1340,21 @@ COPY public.volunteer_sdg (volunteer_id, sdg_id) FROM stdin;
 -- Name: User_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public."User_user_id_seq"', 36, true);
+SELECT pg_catalog.setval('public."User_user_id_seq"', 5, true);
 
 
 --
 -- Name: attendance_attendance_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.attendance_attendance_id_seq', 8, true);
+SELECT pg_catalog.setval('public.attendance_attendance_id_seq', 1, false);
 
 
 --
 -- Name: attendance_entry_attendance_entry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.attendance_entry_attendance_entry_id_seq', 29, true);
+SELECT pg_catalog.setval('public.attendance_entry_attendance_entry_id_seq', 1, false);
 
 
 --
@@ -1650,7 +1368,7 @@ SELECT pg_catalog.setval('public.campus_campus_id_seq', 4, true);
 -- Name: certificate_certificate_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.certificate_certificate_id_seq', 3, true);
+SELECT pg_catalog.setval('public.certificate_certificate_id_seq', 1, false);
 
 
 --
@@ -1678,21 +1396,21 @@ SELECT pg_catalog.setval('public.faculty_faculty_id_seq', 9, true);
 -- Name: ngo_application_application_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.ngo_application_application_id_seq', 5, true);
+SELECT pg_catalog.setval('public.ngo_application_application_id_seq', 1, false);
 
 
 --
 -- Name: ngo_partnership_partnership_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.ngo_partnership_partnership_id_seq', 3, true);
+SELECT pg_catalog.setval('public.ngo_partnership_partnership_id_seq', 1, false);
 
 
 --
 -- Name: notification_notification_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.notification_notification_id_seq', 7, true);
+SELECT pg_catalog.setval('public.notification_notification_id_seq', 1, false);
 
 
 --
@@ -1713,28 +1431,28 @@ SELECT pg_catalog.setval('public.picture_picture_id_seq', 1, false);
 -- Name: project_project_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.project_project_id_seq', 10, true);
+SELECT pg_catalog.setval('public.project_project_id_seq', 1, false);
 
 
 --
 -- Name: project_summary_summary_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.project_summary_summary_id_seq', 8, true);
+SELECT pg_catalog.setval('public.project_summary_summary_id_seq', 1, false);
 
 
 --
 -- Name: qrcode_qrcode_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.qrcode_qrcode_id_seq', 3, true);
+SELECT pg_catalog.setval('public.qrcode_qrcode_id_seq', 1, false);
 
 
 --
 -- Name: report_report_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.report_report_id_seq', 3, true);
+SELECT pg_catalog.setval('public.report_report_id_seq', 1, false);
 
 
 --
@@ -1755,14 +1473,14 @@ SELECT pg_catalog.setval('public.sponsor_sponsor_id_seq', 1, false);
 -- Name: suspension_suspension_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.suspension_suspension_id_seq', 3, true);
+SELECT pg_catalog.setval('public.suspension_suspension_id_seq', 1, false);
 
 
 --
 -- Name: unregistered_volunteer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.unregistered_volunteer_id_seq', 4, true);
+SELECT pg_catalog.setval('public.unregistered_volunteer_id_seq', 1, false);
 
 
 --

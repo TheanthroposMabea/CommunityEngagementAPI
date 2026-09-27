@@ -4,6 +4,7 @@ using CommunityEngagementAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CommunityEngagementAPI.Controllers
 {
@@ -56,6 +57,7 @@ namespace CommunityEngagementAPI.Controllers
             //   HoursLogged = await _db.Volunteer.Where(v => v.Volunteer_Id == Volunteer_Id).Select(v => v.Hours).FirstOrDefaultAsync(),
             var hoursByUser = await _db.Volunteer.Where(v => userIds.Contains(v.Volunteer_Id)).ToListAsync();
             var userHours = hoursByUser.GroupBy(v => v.Volunteer_Id).ToDictionary(g => g.Key, g => g.Sum(v => v.Hours));
+            if (userHours.IsNullOrEmpty()) { return BadRequest("This is empty bro"); }
 
             var assistantAttendances = await _db.Attendance_Register.Where(pr => userIds.Contains(pr.Assistant_Id)  && pr.Project.Status == ProjectStatus.Completed).Include(pr => pr.Project).ToListAsync();
             var Assistanthours = assistantAttendances.GroupBy(a => a.Assistant_Id)

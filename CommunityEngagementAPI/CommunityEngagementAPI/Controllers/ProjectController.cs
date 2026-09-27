@@ -377,6 +377,7 @@ namespace CommunityEngagementAPI.Controllers
                 Date_Created = p.Date_Created,
                 Is_Published = p.Is_Published,
                 Time = p.Time,
+                Status = p.Status.ToString(),
                 Slots = p.Slots,
                 Sdg = _db.Project_Sdg.Where(ps => ps.Project_Id == p.Project_id).Select(s => s.Sdg_Id).ToArray()
             }).ToListAsync();
@@ -411,6 +412,7 @@ namespace CommunityEngagementAPI.Controllers
                 Date_Created = p.Date_Created,
                 Is_Published = p.Is_Published,
                 Time = p.Time,
+                Status = p.Status.ToString(),
                 Slots = p.Slots,
                 Sdg = _db.Project_Sdg.Where(ps => ps.Project_Id == p.Project_id).Select(s => s.Sdg_Id).ToArray()
             }).FirstOrDefaultAsync();
