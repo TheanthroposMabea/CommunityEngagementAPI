@@ -637,7 +637,7 @@ namespace CommunityEngagementAPI.Controllers
             {
                 Project_Id = dto.Project_Id,
                 Assistant_Id = dto.Assistant_Id,
-                Created_At = DateTime.Now,
+               // Created_At = DateTime.Now,
                 Checkinqr_Token = dto.CheckInQr_Token,
                 Checkoutqr_Token = null,
             };
