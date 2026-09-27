@@ -24,17 +24,7 @@ namespace StudentApp.API.Services
             var host = _config["EmailSettings:Host"];
             var port = int.Parse(_config["EmailSettings:Port"]);
 
-            if (string.IsNullOrWhiteSpace(from))
-                throw new Exception("EmailSettings:From is missing");
-
-            if (string.IsNullOrWhiteSpace(password))
-                throw new Exception("EmailSettings:Password is missing");
-
-            if (string.IsNullOrWhiteSpace(host))
-                throw new Exception("EmailSettings:Host is missing");
-            if (string.IsNullOrWhiteSpace(_config["EmailSettings:Port"]))
-                throw new Exception("EmailSettings:Port is missing or invalid");
-
+           
 
             try
             {
@@ -46,7 +36,7 @@ namespace StudentApp.API.Services
 
                 var smtp = new SmtpClient();
                 Console.WriteLine("EMAIL: Connecting..." + from  + host + port);
-                smtp.Connect("smtp.gmail.com", 465, SecureSocketOptions.SslOnConnect);
+                smtp.Connect(host, port);
                 Console.WriteLine("EMAIL: Connected!");
                 Console.WriteLine("EMAIL: Authenticating...");
                 smtp.Authenticate(from, password);

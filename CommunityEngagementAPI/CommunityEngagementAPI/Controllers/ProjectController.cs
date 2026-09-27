@@ -629,7 +629,8 @@ namespace CommunityEngagementAPI.Controllers
             var project = await _db.Project.FindAsync(dto.Project_Id); if (project == null) return BadRequest(new { message = "Project not found" });
             if (project.Date != DateOnly.FromDateTime(DateTime.Now))
             {
-                return BadRequest(new { message = "Wait for project's set date to create attenndance" });
+                DateOnly date = DateOnly.FromDateTime(DateTime.Now);
+                return BadRequest(new { message = "Wait for project's set date to create attenndance", project.Date, date });
             }
 
             var attendance = new Attendance_Register
