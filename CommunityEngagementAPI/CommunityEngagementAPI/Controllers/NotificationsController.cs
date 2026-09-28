@@ -64,7 +64,7 @@ namespace CommunityEngagementAPI.Controllers
         {
             int page = 1;int  pageSize = 20;
 
-            var notifications = await _db.Notification.Where(n => n.User_Id == User_Id).OrderByDescending(n => n.Created_At)
+            var notifications = await _db.Notification.Where(n => n.User_Id == User_Id)
                 .Skip((page - 1) * pageSize).Take(pageSize).Select( n => new RetreiveNotificationDto()
                 {
                   Notification_Id = n.Notification_Id,
@@ -81,7 +81,7 @@ namespace CommunityEngagementAPI.Controllers
                 return NotFound(new { message = "User does not have any unread notifications." });
             }
 
-            return Ok(notifications);
+            return Ok(notifications.OrderByDescending(n => n.Created_At));
         }
 
         [HttpPatch("{UserId}/mark-read/notification/{notificationId}")]     
