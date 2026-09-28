@@ -19,7 +19,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("admin")]
-        [OutputCache(Duration = 900)]
+        //[OutputCache(Duration = 900)]
         public async Task<ActionResult<AdminsDashboardsDto>> GetAdminsDash()
         {
             
@@ -65,7 +65,7 @@ namespace CommunityEngagementAPI.Controllers
         }
         //give the volunteeers dashboard
         [HttpGet("volunteer/{Volunteer_Id}")]
-        [OutputCache(Duration = 900)]
+      //  [OutputCache(Duration = 900)]
         public async Task<IActionResult> GetVolunteerDash(int Volunteer_Id)
         {
             try
@@ -91,7 +91,7 @@ namespace CommunityEngagementAPI.Controllers
         }
         //get the assistant's dashborad
         [HttpGet("assistant/{User_Id}")]
-        [OutputCache(Duration = 900)]
+    //    [OutputCache(Duration = 900)]
         public async Task<IActionResult> GetAssistantDash(int User_Id)
         {
 

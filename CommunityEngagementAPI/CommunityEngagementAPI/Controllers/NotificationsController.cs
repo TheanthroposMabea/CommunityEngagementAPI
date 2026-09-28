@@ -59,7 +59,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("my-notifications/{User_Id}")]
-        [OutputCache(Duration = 900)]
+      //  [OutputCache(Duration = 900)]
         public async Task<IActionResult> GetMyNotifications(int User_Id)
         {
             int page = 1;int  pageSize = 20;
@@ -97,7 +97,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("admin-notification/{Specialist_Id}")]
-        [OutputCache(Duration = 900)]
+    //    [OutputCache(Duration = 900)]
         public async Task<IActionResult> MyCreatedNotifications(int Specialist_Id)
         {
             int page = 1; int pageSize = 20;

@@ -282,7 +282,7 @@ namespace CommunityEngagementAPI.Services
                 new() { Name = "Volunteer Target", Score = targetAchievement }
             };
 
-            result.Campus_Performance = await BuildCampusPerformanceAsync(campusId);
+            result.Campus_Performance = await BuildCampusPerformanceAsync(null);
             result.Performance_Trend = projectReport.Projects_By_Month
                 .Select(x => new PerformanceTrendDto
                 {
