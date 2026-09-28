@@ -253,7 +253,7 @@ namespace CommunityEngagementAPI.Controllers
 
 
         [HttpGet("retriveprojects/{User_Id}")]
-        [OutputCache(PolicyName = "StatusPolicy")]
+      //  [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<ActionResult<ProjectDto>> GetProjects(int User_Id)
         {
             var user = await _db.User.Where(u => u.User_Id == User_Id).FirstOrDefaultAsync();
@@ -361,7 +361,7 @@ namespace CommunityEngagementAPI.Controllers
    //    [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetAllProjects()
         {
-            var projects = await _db.Project.OrderByDescending(p=>p.Date_Created).Include(p => p.ProjectRegisters).Select(p => new ProjectDto
+            var projects = await _db.Project.Include(p => p.ProjectRegisters).Select(p => new ProjectDto
             {
                 Project_Id = p.Project_id,
                 Title = p.Title,
@@ -390,7 +390,7 @@ namespace CommunityEngagementAPI.Controllers
                 return NotFound(new { message = "Something went wrong while trying to retrieve projects, might be empty" });
             }
 
-            return Ok(projects);
+            return Ok(projects.OrderByDescending(p=>p.Date_Created));
         }
 
         [HttpGet("{Project_Id}")]
