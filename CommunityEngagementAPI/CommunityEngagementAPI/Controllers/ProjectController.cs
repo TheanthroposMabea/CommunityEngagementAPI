@@ -253,7 +253,7 @@ namespace CommunityEngagementAPI.Controllers
 
 
         [HttpGet("retriveprojects/{User_Id}")]
-      //  [OutputCache(PolicyName = "StatusPolicy")]
+        [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<ActionResult<ProjectDto>> GetProjects(int User_Id)
         {
             var user = await _db.User.Where(u => u.User_Id == User_Id).FirstOrDefaultAsync();
@@ -358,7 +358,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("projects")]
-   //    [OutputCache(PolicyName = "StatusPolicy")]
+      [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetAllProjects()
         {
             var projects = await _db.Project.Include(p => p.ProjectRegisters).Select(p => new ProjectDto
@@ -394,7 +394,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("{Project_Id}")]
-    //    [OutputCache(PolicyName = "StatusPolicy")]
+        [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetSpecificProject(int Project_Id)
         {
             var project = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.Project_id == Project_Id).Select(p => new ProjectDto
@@ -432,7 +432,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("myproject-by-sdgs/{Volunteer_Id}")]
-    //    [OutputCache(PolicyName = "StatusPolicy")]
+        [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> MyProjectsBySds(int Volunteer_Id)
         {
             var volunteer = await _db.Volunteer.Include(v => v.VolunteerSdgs).FirstOrDefaultAsync(v => v.Volunteer_Id == Volunteer_Id);
@@ -454,7 +454,7 @@ namespace CommunityEngagementAPI.Controllers
 
         //get project by status
         [HttpGet("projects/status/{Status}")]
-    //    [OutputCache(PolicyName = "StatusPolicy")]
+        [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetProjectsByStatus(string Status)
         {
             if (!Enum.TryParse<ProjectStatus>(Status, true, out var appStatus))
