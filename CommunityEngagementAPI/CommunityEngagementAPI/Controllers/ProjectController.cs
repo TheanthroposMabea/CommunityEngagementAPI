@@ -385,12 +385,12 @@ namespace CommunityEngagementAPI.Controllers
                 Slots = p.Slots,
                 Sdg = _db.Project_Sdg.Where(ps => ps.Project_Id == p.Project_id).Select(s => s.Sdg_Id).ToArray()
             }).ToListAsync();
-            if (projects == null)
+            if (projects.IsNullOrEmpty())
             {
                 return NotFound(new { message = "Something went wrong while trying to retrieve projects, might be empty" });
             }
 
-            return Ok(projects.OrderByDescending(p=>p.Date_Created));
+            return Ok(projects);
         }
 
         [HttpGet("{Project_Id}")]
@@ -480,6 +480,7 @@ namespace CommunityEngagementAPI.Controllers
                 Date = p.Date,
                 Date_Created = p.Date_Created,
                 Is_Published = p.Is_Published,
+                Status = p.Status.ToString(),
                 Campus_Id = p.Campus_Id,
                 Time = p.Time,
                 Slots = p.Slots,
