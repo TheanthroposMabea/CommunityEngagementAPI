@@ -187,7 +187,7 @@ namespace CommunityEngagementAPI.Controllers
                 project.Is_Published = false;
                 await _db.SaveChangesAsync();
 
-                //  await cacheStore.EvictByTagAsync("status-tag", default);
+               //   await cacheStore.EvictByTagAsync("status-tag", default);
 
                 var type = Enum.TryParse<NotificationType>("ProjectCancelled", true, out var parsed)
             ? parsed
@@ -235,7 +235,7 @@ namespace CommunityEngagementAPI.Controllers
 
             await _db.SaveChangesAsync();
 
-          //   await cacheStore.EvictByTagAsync("status-tag", default);
+            // await cacheStore.EvictByTagAsync("status-tag", default);
 
             var type = Enum.TryParse<NotificationType>("ProjectUpdated", true, out var parsed)
          ? parsed
@@ -253,7 +253,7 @@ namespace CommunityEngagementAPI.Controllers
 
 
         [HttpGet("retriveprojects/{User_Id}")]
-      //  [OutputCache(PolicyName = "StatusPolicy")]
+        //[OutputCache(PolicyName = "StatusPolicy")]
         public async Task<ActionResult<ProjectDto>> GetProjects(int User_Id)
         {
             var user = await _db.User.Where(u => u.User_Id == User_Id).FirstOrDefaultAsync();
@@ -358,7 +358,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("projects")]
-     // [OutputCache(PolicyName = "StatusPolicy")]
+      //[OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetAllProjects()
         {
             var projects = await _db.Project.Include(p => p.ProjectRegisters).Select(p => new ProjectDto
@@ -394,7 +394,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("{Project_Id}")]
-     //   [OutputCache(PolicyName = "StatusPolicy")]
+       // [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetSpecificProject(int Project_Id)
         {
             var project = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.Project_id == Project_Id).Select(p => new ProjectDto
@@ -432,7 +432,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("myproject-by-sdgs/{Volunteer_Id}")]
-     //   [OutputCache(PolicyName = "StatusPolicy")]
+      //  [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> MyProjectsBySds(int Volunteer_Id)
         {
             var volunteer = await _db.Volunteer.Include(v => v.VolunteerSdgs).FirstOrDefaultAsync(v => v.Volunteer_Id == Volunteer_Id);
@@ -454,7 +454,7 @@ namespace CommunityEngagementAPI.Controllers
 
         //get project by status
         [HttpGet("projects/status/{Status}")]
-       // [OutputCache(PolicyName = "StatusPolicy")]
+      //  [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> GetProjectsByStatus(string Status)
         {
             if (!Enum.TryParse<ProjectStatus>(Status, true, out var appStatus))
@@ -480,7 +480,7 @@ namespace CommunityEngagementAPI.Controllers
                 Date = p.Date,
                 Date_Created = p.Date_Created,
                 Is_Published = p.Is_Published,
-                Status = p.Status.ToString(),
+                 Status = p.Status.ToString(),
                 Campus_Id = p.Campus_Id,
                 Time = p.Time,
                 Slots = p.Slots,
@@ -699,7 +699,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("participants/{Project_Id}")]
-      //  [OutputCache(PolicyName = "StatusPolicy")]
+        //[OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> JoinedVolunteers(int Project_Id)
         {
 
@@ -718,7 +718,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpPost("create-checkoutqr")]
-        public async Task<IActionResult> OpenCheckout([FromBody] CheckOutDto dto)
+        public async Task<IActionResult> OpenCheckout([FromBody] CheckOutDto dto,[FromServices] IOutputCacheStore cacheStore)
         {
 
             var attendance = await _db.Attendance_Register.Include(ar=>ar.Project).FirstOrDefaultAsync(ar=>ar.Attendance_Id == dto.Attendance_Id);
@@ -728,7 +728,7 @@ namespace CommunityEngagementAPI.Controllers
             attendance.Checkoutqr_Token = dto.CheckOutQr_Token;
             attendance.Project.Status = ProjectStatus.Completed;
             await _db.SaveChangesAsync();
-            // await cacheStore.EvictByTagAsync("status-tag", default);
+             await cacheStore.EvictByTagAsync("status-tag", default);
 
 
             return Ok(new { message = "Check out code created successful" });
@@ -776,7 +776,7 @@ namespace CommunityEngagementAPI.Controllers
             }
            
             await _db.SaveChangesAsync();
-            //await cacheStore.EvictByTagAsync("status-tag", default);
+          //  await cacheStore.EvictByTagAsync("status-tag", default);
             return Ok(new { message = "Added unregistered volunteers for both system and project" });
         }
         [HttpPost("check-out")]
@@ -801,7 +801,7 @@ namespace CommunityEngagementAPI.Controllers
             volunteer.Hours = Math.Round(
             volunteer.Hours + (double)entry.Hours_Logged,2);
             await _db.SaveChangesAsync();
-          //  await cacheStore.EvictByTagAsync("status-tag", default);
+           // await cacheStore.EvictByTagAsync("status-tag", default);
             return Ok(new
             {
                 entry.Hours_Logged
@@ -809,7 +809,7 @@ namespace CommunityEngagementAPI.Controllers
         }
 
         [HttpGet("retrieve-checks")]
-        [OutputCache(PolicyName = "StatusPolicy")]
+       // [OutputCache(PolicyName = "StatusPolicy")]
         public async Task<IActionResult> RetrieveAttendances()
         {
             var attendances = await _db.Attendance_Register.ToListAsync();

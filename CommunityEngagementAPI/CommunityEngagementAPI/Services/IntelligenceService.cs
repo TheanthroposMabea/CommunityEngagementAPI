@@ -49,10 +49,9 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
+      
         // PROJECT HEALTH
-        // ============================================================
-
+      
         public async Task<List<ProjectHealthDto>> GetProjectHealth(
             int? projectId = null)
         {
@@ -80,9 +79,8 @@ namespace CommunityEngagementAPI.Services
                 .Select(p => p.Project_id)
                 .ToList();
 
-            // --------------------------------------------------------
             // ATTENDANCE
-            // --------------------------------------------------------
+            
 
             var attendance = await _db.Attendance_Entry
                 .Where(a =>
@@ -100,9 +98,9 @@ namespace CommunityEngagementAPI.Services
                 .ToListAsync();
 
 
-            // --------------------------------------------------------
+          
             // PROJECT SUMMARIES
-            // --------------------------------------------------------
+           
 
             var summaries = await _db.Project_Summary
                 .Where(s =>
@@ -123,9 +121,9 @@ namespace CommunityEngagementAPI.Services
 
             foreach (var project in projects)
             {
-                // ====================================================
+            
                 // BASIC PROJECT INFORMATION
-                // ====================================================
+              
 
                 var registered =
                     project.ProjectRegisters
@@ -153,9 +151,9 @@ namespace CommunityEngagementAPI.Services
                         project.Project_id);
 
 
-                // ====================================================
+              
                 // PROJECT LIFECYCLE
-                // ====================================================
+              
 
                 var isCompleted =
                     project.Status ==
@@ -178,9 +176,8 @@ namespace CommunityEngagementAPI.Services
                     isToday || isPast;
 
 
-                // ====================================================
                 // ATTENDANCE
-                // ====================================================
+              
 
                 double attendanceRate = 0;
 
@@ -195,9 +192,9 @@ namespace CommunityEngagementAPI.Services
                 }
 
 
-                // ====================================================
+             
                 // ISSUES
-                // ====================================================
+               
 
                 var issues =
                     new List<ProjectIssue>();
@@ -206,27 +203,13 @@ namespace CommunityEngagementAPI.Services
                     new List<string>();
 
 
-                // ====================================================
+               
                 // COMPLETED PROJECT
-                // ====================================================
+              
 
                 if (isCompleted)
                 {
-                    /*
-                     * A completed project is no longer an
-                     * operational project.
-                     *
-                     * Therefore:
-                     *
-                     * - Do NOT complain that it is overdue.
-                     * - Do NOT complain about low registration.
-                     * - Do NOT complain about attendance.
-                     *
-                     * Those are historical limitations.
-                     *
-                     * The only current problem here is a
-                     * missing Project Summary.
-                     */
+                    
 
                     if (!hasSummary)
                     {
@@ -245,9 +228,9 @@ namespace CommunityEngagementAPI.Services
                     }
 
 
-                    // ------------------------------------------------
+                   
                     // HISTORICAL LIMITATIONS
-                    // ------------------------------------------------
+                   
 
                     if (project.Num_Volunteers > 0)
                     {
@@ -277,39 +260,25 @@ namespace CommunityEngagementAPI.Services
                 }
 
 
-                // ====================================================
+              
                 // CANCELLED PROJECT
-                // ====================================================
+               
 
                 else if (isCancelled)
                 {
-                    /*
-                     * A cancelled project should not appear as
-                     * a Critical operational project.
-                     *
-                     * It is simply cancelled.
-                     */
+                   
 
                     attendanceRate = 0;
                 }
 
 
-                // ====================================================
+              
                 // FUTURE PROJECT
-                // ====================================================
+               
 
                 else if (isFuture)
                 {
-                    /*
-                     * A future project has not started.
-                     *
-                     * THAT IS NORMAL.
-                     *
-                     * Therefore:
-                     *
-                     * DO NOT add:
-                     * "Project has not started."
-                     */
+                    
 
                     attendanceRate = 0;
 
@@ -318,9 +287,8 @@ namespace CommunityEngagementAPI.Services
                         today.DayNumber;
 
 
-                    // ------------------------------------------------
                     // VOLUNTEER RECRUITMENT
-                    // ------------------------------------------------
+                   
 
                     if (project.Num_Volunteers > 0 &&
                         registered < project.Num_Volunteers &&
@@ -365,29 +333,18 @@ namespace CommunityEngagementAPI.Services
                 }
 
 
-                // ====================================================
+               
                 // ACTIVE / PAST BUT NOT COMPLETED
-                // ====================================================
+              
 
                 else
                 {
-                    /*
-                     * At this point:
-                     *
-                     * - Not completed
-                     * - Not cancelled
-                     * - Not future
-                     *
-                     * Therefore the project is either:
-                     *
-                     * - happening today
-                     * - or its date has already passed.
-                     */
+                   
 
 
-                    // ------------------------------------------------
+               
                     // PROJECT DATE PASSED
-                    // ------------------------------------------------
+                   
 
                     if (isPast)
                     {
@@ -406,9 +363,8 @@ namespace CommunityEngagementAPI.Services
                     }
 
 
-                    // ------------------------------------------------
                     // VOLUNTEER REGISTRATION
-                    // ------------------------------------------------
+                   
 
                     if (project.Num_Volunteers > 0 &&
                         registered < project.Num_Volunteers)
@@ -451,9 +407,9 @@ namespace CommunityEngagementAPI.Services
                     }
 
 
-                    // ------------------------------------------------
+                  
                     // ATTENDANCE
-                    // ------------------------------------------------
+                    
 
                     if (hasStarted &&
                         registered > 0)
@@ -491,9 +447,9 @@ namespace CommunityEngagementAPI.Services
                     }
 
 
-                    // ------------------------------------------------
+                   
                     // MISSING PROJECT SUMMARY
-                    // ------------------------------------------------
+                 
 
                     if (isPast && !hasSummary)
                     {
@@ -513,9 +469,9 @@ namespace CommunityEngagementAPI.Services
                 }
 
 
-                // ====================================================
+             
                 // ORDER ISSUES
-                // ====================================================
+                
 
                 var orderedIssues =
                     issues
@@ -524,9 +480,9 @@ namespace CommunityEngagementAPI.Services
                         .ToList();
 
 
-                // ====================================================
+               
                 // HEALTH SCORE
-                // ====================================================
+               
 
                 var score = 100;
 
@@ -550,9 +506,8 @@ namespace CommunityEngagementAPI.Services
                         Math.Min(100, score));
 
 
-                // ====================================================
                 // HEALTH STATUS
-                // ====================================================
+               
 
                 string healthStatus;
 
@@ -574,17 +529,16 @@ namespace CommunityEngagementAPI.Services
                 }
 
 
-                // ====================================================
                 // PRIMARY PROBLEM
-                // ====================================================
+               
 
                 var primaryIssue =
                     orderedIssues.FirstOrDefault();
 
 
-                // ====================================================
+              
                 // SUMMARY OVERDUE
-                // ====================================================
+              
 
                 var summaryOverdue =
                     !isCancelled &&
@@ -595,9 +549,9 @@ namespace CommunityEngagementAPI.Services
                     );
 
 
-                // ====================================================
+             
                 // DTO
-                // ====================================================
+             
 
                 result.Add(new ProjectHealthDto
                 {
@@ -683,9 +637,9 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
+      
         // PROJECT PROBLEMS
-        // ============================================================
+
 
         public async Task<List<ProjectProblemDto>>
             GetProjectProblems()
@@ -694,15 +648,7 @@ namespace CommunityEngagementAPI.Services
                 await GetProjectHealth();
 
 
-            /*
-             * IMPORTANT:
-             *
-             * Command Centre should show only ONE
-             * primary problem per project.
-             *
-             * The full list remains available through
-             * GetProjectIntelligence().
-             */
+            
 
             return health
                 .Where(p =>
@@ -734,9 +680,9 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
+     
         // PROJECT RECOMMENDATIONS
-        // ============================================================
+      
 
         public async Task<List<ProjectRecommendationDto>>
             GetProjectRecommendations()
@@ -745,13 +691,7 @@ namespace CommunityEngagementAPI.Services
                 await GetProjectHealth();
 
 
-            /*
-             * One primary recommendation per project
-             * for the Command Centre.
-             *
-             * Full recommendations are still available
-             * in Project Intelligence.
-             */
+         
 
             return health
                 .Where(p =>
@@ -783,9 +723,8 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
         // COMMUNITY IMPACT
-        // ============================================================
+       
 
         public async Task<CommunityImpactDto>
             GetCommunityImpact(int days = 30)
@@ -956,9 +895,9 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
+      
         // AREA / FACULTY PERFORMANCE
-        // ============================================================
+      
 
         public async Task<List<AreaPerformanceDto>>
             GetAreaPerformance()
@@ -1175,9 +1114,8 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
         // DIRECTOR DASHBOARD
-        // ============================================================
+     
 
         public async Task<IntelligenceDashboardDto>
             GetDashboard(int? campusId = null)
@@ -1285,9 +1223,9 @@ namespace CommunityEngagementAPI.Services
                 await GetAreaPerformance();
 
 
-            // --------------------------------------------------------
+          
             // OVERDUE SUMMARIES
-            // --------------------------------------------------------
+            
 
             var overdueSummaries =
                 health.Count(
@@ -1295,9 +1233,8 @@ namespace CommunityEngagementAPI.Services
                         h.Summary_Overdue);
 
 
-            // --------------------------------------------------------
             // LOW PARTICIPATION
-            // --------------------------------------------------------
+           
 
             var lowParticipation =
                 health.Count(
@@ -1346,10 +1283,7 @@ namespace CommunityEngagementAPI.Services
                 Impact =
                     impact,
 
-                /*
-                 * Command Centre gets only the highest
-                 * priority problem for each project.
-                 */
+                
 
                 Problems =
                     problems
@@ -1372,9 +1306,8 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
         // SPECIALIST DASHBOARD
-        // ============================================================
+       
 
         public async Task<SpecialistIntelligenceDashboardDto>
             GetSpecialistDashboard(
@@ -1418,9 +1351,9 @@ namespace CommunityEngagementAPI.Services
                 specialist.Campus_Id.Value;
 
 
-            // --------------------------------------------------------
+           
             // CAMPUS PROJECTS
-            // --------------------------------------------------------
+         
 
             var campusProjects =
                 await _db.Project
@@ -1432,9 +1365,9 @@ namespace CommunityEngagementAPI.Services
                     .ToListAsync();
 
 
-            // --------------------------------------------------------
+          
             // SPECIALIST'S OWN PROJECTS
-            // --------------------------------------------------------
+            
 
             var myProjectIds =
                 await _db.Project
@@ -1479,9 +1412,9 @@ namespace CommunityEngagementAPI.Services
                     .ToList();
 
 
-            // --------------------------------------------------------
+         
             // CAMPUS PROBLEMS
-            // --------------------------------------------------------
+          
 
             var campusProblems =
                 campusHealth
@@ -1516,9 +1449,9 @@ namespace CommunityEngagementAPI.Services
                     .ToList();
 
 
-            // --------------------------------------------------------
+           
             // CAMPUS RECOMMENDATIONS
-            // --------------------------------------------------------
+           
 
             var campusRecommendations =
                 campusHealth
@@ -1569,9 +1502,9 @@ namespace CommunityEngagementAPI.Services
                     .ToList();
 
 
-            // --------------------------------------------------------
+          
             // CAMPUS VOLUNTEERS
-            // --------------------------------------------------------
+         
 
             var volunteers =
                 await _db.User
@@ -1587,9 +1520,8 @@ namespace CommunityEngagementAPI.Services
                     .ToListAsync();
 
 
-            // --------------------------------------------------------
             // PERIOD
-            // --------------------------------------------------------
+         
 
             var fromDate =
                 DateOnly.FromDateTime(
@@ -1614,9 +1546,9 @@ namespace CommunityEngagementAPI.Services
                     .ToListAsync();
 
 
-            // --------------------------------------------------------
+          
             // CAMPUS ATTENDANCE
-            // --------------------------------------------------------
+           
 
             var campusAttendance =
                 await _db.Attendance_Entry
@@ -1635,9 +1567,8 @@ namespace CommunityEngagementAPI.Services
                     .ToListAsync();
 
 
-            // --------------------------------------------------------
             // CAMPUS REGISTRATIONS
-            // --------------------------------------------------------
+         
 
             var campusRegistrations =
                 await _db.Project_Register
@@ -1676,9 +1607,9 @@ namespace CommunityEngagementAPI.Services
                     : 0;
 
 
-            // --------------------------------------------------------
+           
             // SDG IMPACT
-            // --------------------------------------------------------
+           
 
             var sdgData =
                 await _db.Project_Sdg
@@ -1876,9 +1807,9 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
+     
         // COMPLETE PROJECT INTELLIGENCE
-        // ============================================================
+      
 
         public async Task<ProjectIntelligenceDto>
             GetProjectIntelligence(int projectId)
@@ -1895,15 +1826,7 @@ namespace CommunityEngagementAPI.Services
             }
 
 
-            /*
-             * IMPORTANT:
-             *
-             * Do NOT call GetProjectProblems()
-             * because that intentionally returns only
-             * one primary problem per project.
-             *
-             * The detail page needs ALL problems.
-             */
+          
 
             var problems =
                 health.Problems
@@ -1977,9 +1900,9 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
+      
         // ASSISTANT DASHBOARD
-        // ============================================================
+      
 
         public async Task<AssistantIntelligenceDashboardDto>
             GetAssistantDashboard(int assistantId)
@@ -2130,9 +2053,9 @@ namespace CommunityEngagementAPI.Services
                     1);
 
 
-            // --------------------------------------------------------
+         
             // ASSISTANT PROBLEMS
-            // --------------------------------------------------------
+         
 
             var problems =
                 projectHealth
@@ -2168,9 +2091,8 @@ namespace CommunityEngagementAPI.Services
                     .ToList();
 
 
-            // --------------------------------------------------------
             // ASSISTANT RECOMMENDATIONS
-            // --------------------------------------------------------
+           
 
             var recommendations =
                 projectHealth
@@ -2256,9 +2178,9 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
+      
         // VOLUNTEER DASHBOARD
-        // ============================================================
+     
 
         public async Task<VolunteerIntelligenceDashboardDto>
             GetVolunteerDashboard(int volunteerId)
@@ -2545,9 +2467,9 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
+     
         // PROJECT HEALTH FOR MULTIPLE IDS
-        // ============================================================
+      
 
         private async Task<List<ProjectHealthDto>>
             GetProjectHealthForIds(
@@ -2560,10 +2482,7 @@ namespace CommunityEngagementAPI.Services
             }
 
 
-            /*
-             * Do one call instead of calling
-             * GetProjectHealth() once per project.
-             */
+           
 
             var query =
                 _db.Project
@@ -2749,9 +2668,9 @@ namespace CommunityEngagementAPI.Services
                     new List<string>();
 
 
-                // ----------------------------------------------------
+              
                 // COMPLETED
-                // ----------------------------------------------------
+             
 
                 if (isCompleted)
                 {
@@ -2810,9 +2729,9 @@ namespace CommunityEngagementAPI.Services
                 }
 
 
-                // ----------------------------------------------------
+               
                 // FUTURE
-                // ----------------------------------------------------
+           
 
                 else if (isFuture)
                 {
@@ -2869,9 +2788,9 @@ namespace CommunityEngagementAPI.Services
                 }
 
 
-                // ----------------------------------------------------
+             
                 // ACTIVE / PAST
-                // ----------------------------------------------------
+              
 
                 else
                 {
@@ -3158,9 +3077,9 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
+   
         // AUTOMATIC PROJECT CHECKS
-        // ============================================================
+       
 
         public async Task ProcessAutomaticProjectChecks(
             CancellationToken cancellationToken)
@@ -3169,9 +3088,9 @@ namespace CommunityEngagementAPI.Services
                 await GetProjectHealth();
 
 
-            // ========================================================
+         
             // PROJECT RISK NOTIFICATIONS
-            // ========================================================
+        
 
             foreach (
                 var project in health
@@ -3241,9 +3160,9 @@ namespace CommunityEngagementAPI.Services
                 }
 
 
-                // ----------------------------------------------------
+              
                 // SUMMARY ESCALATION
-                // ----------------------------------------------------
+              
 
                 if (project.Summary_Overdue)
                 {
@@ -3290,19 +3209,18 @@ namespace CommunityEngagementAPI.Services
             }
 
 
-            // ========================================================
+          
             // SDG VOLUNTEER RECRUITMENT
             // ONE DAY BEFORE PROJECT
-            // ========================================================
+          
 
             await SendSdgVolunteerRecruitmentNotifications(
                 cancellationToken);
         }
 
 
-        // ============================================================
         // SDG VOLUNTEER RECRUITMENT
-        // ============================================================
+      
 
         private async Task
             SendSdgVolunteerRecruitmentNotifications(
@@ -3347,10 +3265,8 @@ namespace CommunityEngagementAPI.Services
                 if (remaining <= 0)
                     continue;
 
-
-                // ----------------------------------------------------
-                // PROJECT SDGs
-                // ----------------------------------------------------
+ // PROJECT SDGs
+              
 
                 var sdgIds =
                     await _db.Project_Sdg
@@ -3368,9 +3284,9 @@ namespace CommunityEngagementAPI.Services
                     continue;
 
 
-                // ----------------------------------------------------
+              
                 // ALREADY REGISTERED USERS
-                // ----------------------------------------------------
+              
 
                 var registeredUserIds =
                     project.ProjectRegisters
@@ -3381,9 +3297,9 @@ namespace CommunityEngagementAPI.Services
                         .ToHashSet();
 
 
-                // ----------------------------------------------------
+             
                 // VOLUNTEERS INTERESTED IN PROJECT SDGs
-                // ----------------------------------------------------
+             
 
                 var matchingVolunteerIds =
                     await _db.Volunteer_Sdg
@@ -3401,9 +3317,9 @@ namespace CommunityEngagementAPI.Services
                     continue;
 
 
-                // ----------------------------------------------------
+              
                 // ACTIVE VOLUNTEERS
-                // ----------------------------------------------------
+           
 
                 var targetVolunteerIds =
                     await _db.User
@@ -3426,9 +3342,9 @@ namespace CommunityEngagementAPI.Services
                     continue;
 
 
-                // ----------------------------------------------------
+              
                 // NOTIFICATION
-                // ----------------------------------------------------
+             
 
                 var title =
                     "Volunteers Needed for Tomorrow";
@@ -3475,9 +3391,8 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
         // PRIORITY HELPER
-        // ============================================================
+        
 
         private static int
             GetPriorityFromSeverity(
@@ -3498,9 +3413,9 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
+       
         // INTERNAL ISSUE MODEL
-        // ============================================================
+       
 
         private class ProjectIssue
         {
@@ -3517,9 +3432,9 @@ namespace CommunityEngagementAPI.Services
         }
 
 
-        // ============================================================
+     
         // ATTENDANCE HELPER
-        // ============================================================
+ 
 
         private class AttendanceEntryForIntelligence
         {

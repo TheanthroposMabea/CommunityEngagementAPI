@@ -35,17 +35,16 @@ namespace StudentApp.API.Services
                 email.Body = body;
 
                 var smtp = new SmtpClient();
-                Console.WriteLine("EMAIL: Connecting..." + from  + host + port);
+               
                 smtp.Connect(host, port);
-                Console.WriteLine("EMAIL: Connected!");
-                Console.WriteLine("EMAIL: Authenticating...");
+              
+             
                 smtp.Authenticate(from, password);
-                Console.WriteLine("EMAIL: Authenticated!");
-                Console.WriteLine("EMAIL: Sending...");
-                smtp.Send(email);
-                Console.WriteLine("EMAIL: Sent!");
+             
+              
+            
                 smtp.Disconnect(true);
-                Console.WriteLine("EMAIL: Disconnected!");
+            
             }
             catch (Exception ex) {
                 Console.WriteLine($"EMAIL ERROR: {ex}");

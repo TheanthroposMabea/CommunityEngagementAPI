@@ -80,10 +80,7 @@ namespace CommunityEngagementAPI.Services
                     }
                 ).ToListAsync();
 
-            // IMPORTANT:
-            // Summary_Overdue belongs to ProjectHealthDto and is calculated by the
-            // existing IntelligenceService. We reuse that value rather than creating
-            // a second, potentially inconsistent definition of an overdue report.
+            
             var health = await _intelligenceService.GetProjectHealth();
             var scopedHealth = health
                 .Where(h => projectIds.Contains(h.Project_Id))
@@ -116,7 +113,7 @@ namespace CommunityEngagementAPI.Services
                     ? 0
                     : Round((double)registrations.Count / projects.Count),
 
-                // This is the same Summary_Overdue boolean already used by the
+               
                 // Intelligence/Command Centre reports.
                 Overdue_Reports = scopedHealth.Count(h => h.Summary_Overdue)
             };
@@ -132,8 +129,7 @@ namespace CommunityEngagementAPI.Services
                 .ToHashSet();
 
             // Attendance is based on project/user pairs, not on the project date.
-            // A project that has not started therefore does not become a false 0%
-            // attendance problem in this report.
+         
             report.Attendance_Rate = registeredUsers.Count == 0
                 ? 0
                 : Round((double)registeredUsers.Count(attendedUsers.Contains) / registeredUsers.Count * 100);
@@ -246,8 +242,7 @@ namespace CommunityEngagementAPI.Services
                 targetAchievement * 0.25 +
                 participation * 0.15);
 
-            // Reuse the same health information used by Command Centre so
-            // "needing attention" and overdue reports stay consistent.
+           
             var health = await _intelligenceService.GetProjectHealth();
             var projectIds = await GetScopedProjectIdsAsync(campusId);
             var scopedHealth = health
