@@ -257,8 +257,9 @@ namespace CommunityEngagementAPI.Controllers
         public async Task<ActionResult<ProjectDto>> GetProjects(int User_Id)
         {
             var user = await _db.User.Where(u => u.User_Id == User_Id).FirstOrDefaultAsync();
+            if (user == null) { return BadRequest("User null"); }
 
-            if (user != null && user.Role == UserRoleType.specialist)
+            else if (user.Role == UserRoleType.specialist)
             {
                 var campusProjects = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.Campus_Id == user.Campus_Id).Select(p => new ProjectDto
                 {
@@ -289,7 +290,7 @@ namespace CommunityEngagementAPI.Controllers
                 return Ok(campusProjects);
 
             }
-            else if (user != null && user.Role == UserRoleType.staff)
+            else if ( user.Role == UserRoleType.staff)
 
             {
                 var projects = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.User_Id == user.User_Id).Select(p => new ProjectDto
@@ -318,7 +319,7 @@ namespace CommunityEngagementAPI.Controllers
 
                 return Ok(projects);
             }
-            else if (user != null && user.Role == UserRoleType.volunteer || user.Role == UserRoleType.assistant)
+            else if (user.Role == UserRoleType.volunteer || user.Role == UserRoleType.assistant)
             {
                 var campusProjects = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.Campus_Id == user.Campus_Id && p.Is_Published == true).Select(p => new ProjectDto
                 {
