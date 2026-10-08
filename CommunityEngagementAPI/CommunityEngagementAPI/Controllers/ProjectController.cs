@@ -290,7 +290,7 @@ namespace CommunityEngagementAPI.Controllers
                 return Ok(campusProjects);
 
             }
-            else if ( user.Role == UserRoleType.staff)
+            else if (user.Role == UserRoleType.staff)
 
             {
                 var projects = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.User_Id == user.User_Id).Select(p => new ProjectDto
@@ -319,7 +319,7 @@ namespace CommunityEngagementAPI.Controllers
 
                 return Ok(projects);
             }
-            else if (user.Role == UserRoleType.volunteer || user.Role == UserRoleType.assistant)
+            else if (user.Role == UserRoleType.volunteer)
             {
                 var campusProjects = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.Campus_Id == user.Campus_Id && p.Is_Published == true).Select(p => new ProjectDto
                 {
@@ -340,7 +340,7 @@ namespace CommunityEngagementAPI.Controllers
                     Campus_Id = p.Campus_Id,
                     Date = p.Date,
                     Date_Created = p.Date_Created,
-                     Is_Published = p.Is_Published,
+                    Is_Published = p.Is_Published,
                     Time = p.Time,
                     Slots = p.Slots,
                     Sdg = _db.Project_Sdg.Where(ps => ps.Project_Id == p.Project_id).Select(s => s.Sdg_Id).ToArray()
@@ -349,6 +349,36 @@ namespace CommunityEngagementAPI.Controllers
 
                 return Ok(campusProjects);
             }
+            else if ( user.Role == UserRoleType.assistant)
+            {
+                var campusProjects = await _db.Project.Include(p => p.ProjectRegisters).Where(p => p.Campus_Id == user.Campus_Id && p.Is_Published == true).Select(p => new ProjectDto
+                {
+                    Project_Id = p.Project_id,
+                    Title = p.Title,
+                    Type = p.Type,
+                    Location = p.Location,
+                    Location_Scope = p.Location_Scope.ToString(),
+                    Partner = p.Partner.ToString(),
+                    Partner_Name = p.Partner_Name,
+                    Partner_Id = p.Partner_Id,
+                    Category = p.Category.ToString(),
+                    Hours = p.Hours,
+                    Num_Volunteers = p.Num_Volunteers,
+                    Description = p.Description,
+                    Target_Group = p.Target_Group,
+                    Status = p.Status.ToString(),
+                    Campus_Id = p.Campus_Id,
+                    Date = p.Date,
+                    Date_Created = p.Date_Created,
+                    Is_Published = p.Is_Published,
+                    Time = p.Time,
+                    Slots = p.Slots,
+                    Sdg = _db.Project_Sdg.Where(ps => ps.Project_Id == p.Project_id).Select(s => s.Sdg_Id).ToArray()
+
+                }).ToListAsync();
+
+                return Ok(campusProjects);
+                    }
             else
             {
                 return NotFound(new { message = "Something went wrong while trying to retrieve projects, might be empty" });
